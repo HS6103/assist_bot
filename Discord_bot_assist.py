@@ -6,20 +6,56 @@ import discord
 import json
 import re
 from datetime import datetime
+import concurrent.futures
 from pprint import pprint
 
-from assist_datetime.main import askLoki, askLLM, getSimilarity
-
+from assist_datetime.main import askLoki as askLoki_datetime
 
 logging.basicConfig(level=logging.DEBUG)
 
-def getLokiResult(inputSTR, filterLIST=[]):
+"""
+class meet():
+    def __init__(self):
+"""
+# Send msgSTR to multiple Loki project concurrently
+def processMsg(msgSTR):
+    proj = ""
+    # Define the functions to run concurrently
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future1 = executor.submit(getLokiResult, msgSTR, "datetime")
+        """
+        future2 = executor.submit(module2.func, msgSTR, "meet")
+        future3 = executor.submit(module3.func, msgSTR, "record")
+        """
+
+        # Collect results
+        results = [future.result() for future in concurrent.futures.as_completed([future1])]
+
+    # Initialize final result dictionary
+    final_result = {}
+
+    for result in results:
+        if "response" in result and result["response"] != ['']:
+            final_result.update(result)  # Merge the result
+
+    return final_result
+
+def getLokiResult(inputSTR, projSTR, filterLIST=[]):
     splitLIST = ["！", "，", "。", "？", "!", ",", "\n", "；", "\u3000", ";"] #
     # 設定參考資料
     refDICT = { # value 必須為 list
         #"key": []
     }
-    resultDICT = askLoki(inputSTR, filterLIST=filterLIST, splitLIST=splitLIST, refDICT=refDICT)
+
+    if projSTR == "datetime":
+        resultDICT = askLoki_datetime(inputSTR, filterLIST=filterLIST, splitLIST=splitLIST, refDICT=refDICT)
+    elif projSTR == "meet":
+        pass
+    elif projSTR == "record":
+        pass
+    else:
+        pass
+
     logging.debug("Loki Result => {}".format(resultDICT))
     return resultDICT
 
@@ -84,17 +120,25 @@ class BotClient(discord.Client):
 # ##########非初次對話：這裡用 Loki 計算語意
             else: #開始處理正式對話
                 #從這裡開始接上 NLU 模型
-                resultDICT = getLokiResult(msgSTR)
+                resultDICT = processMsg(msgSTR)
                 logging.debug("######\nLoki 處理結果如下：")
                 logging.debug(resultDICT)
-                if resultDICT["response"] == ['']:
-                    replySTR = "抱歉，這好像不是我能處理的問題喔！"
-                elif resultDICT["response"] != [] and resultDICT["source"] != ["LLM_reply"]:
-                    replySTR = resultDICT["response"][0]
-                else:
-                    assistantSTR = "！"
-                    userSTR = msgSTR
-                    #replySTR = llmCall(accountDICT["username"], assistantSTR, userSTR)
+                try:
+                    if resultDICT:
+                        if resultDICT["response"] == ['']:
+                            replySTR = "抱歉，這好像不是我能處理的問題喔！"
+                        elif resultDICT["response"] != [] and resultDICT["source"] != ["LLM_reply"]:
+                            replySTR = resultDICT["response"][0]
+                        else:
+                            assistantSTR = "！"
+                            userSTR = msgSTR
+                            #replySTR = llmCall(accountDICT["username"], assistantSTR, userSTR)
+                    else:
+                        replySTR = "Bruh you alright?"
+
+                except Exception:
+                    replySTR = "我是預設的回應字串…你會看到我這串字，肯定是出了什麼錯！"
+
             await message.reply(replySTR)
 
 

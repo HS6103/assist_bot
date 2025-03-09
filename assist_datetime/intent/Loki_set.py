@@ -48,6 +48,7 @@ Account 變數清單
 REPLY_PATH = MODULE_DICT["Account"].REPLY_PATH
 ACCOUNT_DICT = MODULE_DICT["Account"].ACCOUNT_DICT
 USER_DEFINED_DICT = MODULE_DICT["Account"].USER_DEFINED_DICT
+ARTICUT = MODULE_DICT["Account"].ARTICUT
 
 # userDefinedDICT (Deprecated)
 # 請使用 Account 變數 USER_DEFINED_DICT 代替
@@ -71,6 +72,13 @@ def debugInfo(inputSTR, utterance):
     if ACCOUNT_DICT["debug"]:
         print("[{}] {} ===> {}".format(INTENT_NAME, inputSTR, utterance))
 
+# 將時間詞轉為 datetime 格式
+def arg2Time(argSTR):
+    articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
+    datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
+
+    return datetimeSTR
+
 def getReply(utterance, args):
     replySTR = ""
     try:
@@ -92,6 +100,8 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["source"] = "reply"
         else:
             resultDICT["response"] = f"好的，我會提醒你{args[0]}要開會！"
+            resultDICT["time"] = arg2Time(args[0])
+            resultDICT["intent"] = "set"
 
     return resultDICT
 

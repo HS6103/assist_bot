@@ -48,6 +48,7 @@ Account 變數清單
 REPLY_PATH = MODULE_DICT["Account"].REPLY_PATH
 ACCOUNT_DICT = MODULE_DICT["Account"].ACCOUNT_DICT
 USER_DEFINED_DICT = MODULE_DICT["Account"].USER_DEFINED_DICT
+ARTICUT = MODULE_DICT["Account"].ARTICUT
 
 # userDefinedDICT (Deprecated)
 # 請使用 Account 變數 USER_DEFINED_DICT 代替
@@ -102,8 +103,6 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            # write your code here
-            # resultDICT[key].append(value)
             pass
 
     if utterance == "[今天]幾[點]開會":
