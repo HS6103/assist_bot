@@ -72,6 +72,16 @@ def debugInfo(inputSTR, utterance):
     if ACCOUNT_DICT["debug"]:
         print("[{}] {} ===> {}".format(INTENT_NAME, inputSTR, utterance))
 
+# 將時間詞轉為 datetime 格式
+def arg2Time(argSTR):
+    articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
+    if articutResultDICT["time"] != [[]]:
+        datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
+    else:
+        datetimeSTR = ""
+
+    return datetimeSTR
+
 def getReply(utterance, args):
     replySTR = ""
     try:
@@ -92,9 +102,8 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            # write your code here
-            # resultDICT[key].append(value)
-            pass
+            resultDICT["time"] = arg2Time(args[0])
+            resultDICT["intent"] = INTENT_NAME
 
     if utterance == "[今天]什麼[時候]開會":
         if CHATBOT:
@@ -103,7 +112,8 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            pass
+            resultDICT["time"] = arg2Time(args[0])
+            resultDICT["intent"] = INTENT_NAME
 
     if utterance == "[今天]幾[點]開會":
         if CHATBOT:
@@ -112,9 +122,8 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            # write your code here
-            # resultDICT[key].append(value)
-            pass
+            resultDICT["time"] = arg2Time(args[0])
+            resultDICT["intent"] = INTENT_NAME
 
     if utterance == "[今天]要開會嗎":
         if CHATBOT:
@@ -123,9 +132,8 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            # write your code here
-            # resultDICT[key].append(value)
-            pass
+            resultDICT["time"] = arg2Time(args[0])
+            resultDICT["intent"] = INTENT_NAME
 
     return resultDICT
 

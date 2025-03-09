@@ -75,7 +75,10 @@ def debugInfo(inputSTR, utterance):
 # 將時間詞轉為 datetime 格式
 def arg2Time(argSTR):
     articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
-    datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
+    if articutResultDICT["time"] != [[]]:
+        datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
+    else:
+        datetimeSTR = ""
 
     return datetimeSTR
 
@@ -101,7 +104,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
         else:
             resultDICT["response"] = f"好的，我會提醒你{args[0]}要開會！"
             resultDICT["time"] = arg2Time(args[0])
-            resultDICT["intent"] = "set"
+            resultDICT["intent"] = INTENT_NAME
 
     return resultDICT
 
