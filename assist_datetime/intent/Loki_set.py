@@ -22,6 +22,7 @@ from random import sample
 import json
 import os
 import datetime
+import re
 
 INTENT_NAME = "set"
 CWD_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -75,6 +76,7 @@ def debugInfo(inputSTR, utterance):
 
 # 將時間詞轉為 datetime 格式
 def arg2Time(argSTR):
+    argSTR = re.sub("晚上", "下午", argSTR)
     articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
     if articutResultDICT["time"] != [[]]:
         datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
