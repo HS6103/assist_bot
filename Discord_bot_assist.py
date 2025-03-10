@@ -182,13 +182,13 @@ class BotClient(discord.Client):
                             if intentSTR == "set":
                                 if checkDuplicateMeet(str(meetDATETIME)):
                                      replySTR = "該時段已經有會議了喔！"
-
                                 else:
                                     newMeet = meet(meetDATETIME)
                                     newMeet.start()
                                     meet_instances[str(meetDATETIME)] = newMeet
                             elif intentSTR == "cancel":
                                 if checkDuplicateMeet(str(meetDATETIME)):
+                                    meet_instances[str(meetDATETIME)].cancel()
                                     del meet_instances[str(meetDATETIME)]
                                     #print(meet_instances)
                                 else:
@@ -199,7 +199,7 @@ class BotClient(discord.Client):
                             userSTR = msgSTR
                             #replySTR = llmCall(accountDICT["username"], assistantSTR, userSTR)
                     else:
-                        replySTR = "Bruh you alright?"
+                        replySTR = "抱歉，我看不太懂，請再說一次看看？"
 
                 except Exception as e:
                     replySTR = "我是預設的回應字串…你會看到我這串字，肯定是出了什麼錯！"

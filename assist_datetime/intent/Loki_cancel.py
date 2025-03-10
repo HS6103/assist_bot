@@ -22,6 +22,7 @@ from random import sample
 from ArticutAPI import Articut
 import json
 import os
+import datetime
 
 INTENT_NAME = "cancel"
 CWD_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -73,15 +74,17 @@ def debugInfo(inputSTR, utterance):
     if ACCOUNT_DICT["debug"]:
         print("[{}] {} ===> {}".format(INTENT_NAME, inputSTR, utterance))
 
-# 將時間詞轉為 datetime 格式
 def arg2Time(argSTR):
     articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
     if articutResultDICT["time"] != [[]]:
         datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
+        if "晚" in argSTR:
+            datetimeOBJ = datetime.datetime.strptime(datetimeSTR, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(hours=12)
     else:
-        datetimeSTR = ""
+        datetimeOBJ = None
 
-    return datetimeSTR
+    return datetimeOBJ
+
 
 def getReply(utterance, args):
     replySTR = ""

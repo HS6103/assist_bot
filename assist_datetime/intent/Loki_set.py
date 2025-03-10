@@ -76,11 +76,11 @@ def debugInfo(inputSTR, utterance):
 
 # 將時間詞轉為 datetime 格式
 def arg2Time(argSTR):
-    argSTR = re.sub("晚上", "下午", argSTR)
     articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
     if articutResultDICT["time"] != [[]]:
         datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
-        datetimeOBJ = datetime.datetime.strptime(datetimeSTR, "%Y-%m-%d %H:%M:%S")
+        if "晚" in argSTR:
+            datetimeOBJ = datetime.datetime.strptime(datetimeSTR, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(hours=12)
     else:
         datetimeOBJ = None
 
