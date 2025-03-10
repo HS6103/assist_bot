@@ -199,7 +199,7 @@ class BotClient(discord.Client):
                             userSTR = msgSTR
                             #replySTR = llmCall(accountDICT["username"], assistantSTR, userSTR)
                     else:
-                        replySTR = "抱歉，我看不太懂，請再說一次看看？"
+                        replySTR = "抱歉，我看不太懂，請再說一次試試看？"
 
                 except Exception as e:
                     replySTR = "我是預設的回應字串…你會看到我這串字，肯定是出了什麼錯！"
