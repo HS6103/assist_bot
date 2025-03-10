@@ -5,18 +5,66 @@ import logging
 import discord
 import json
 import re
-from datetime import datetime
+import datetime
 import concurrent.futures
+import asyncio
 from pprint import pprint
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 from assist_datetime.main import askLoki as askLoki_datetime
 
 logging.basicConfig(level=logging.DEBUG)
 
-"""
+scheduled_task = None  # Global variable to store the scheduled task
+meet_instances = {} # Store meet instances
+
 class meet():
-    def __init__(self):
-"""
+    def __init__(self,time):
+        self.datetime =  time
+        self.todoLIST = []
+        self.channelIdINT = int(os.getenv("channel_id"))
+        self.participant = ""
+        self.task = None
+
+    def start(self):
+        if self.task is None:
+            self.task = asyncio.create_task(self.notify())
+
+    def cancel(self):
+        if self.task:
+            self.task.cancel()
+            self.task = None
+
+    def getdatetime(self):
+        return self.datetime
+
+    async def notify(self):
+        now = datetime.datetime.now()
+        await client.wait_until_ready()  # Ensure bot is logged in
+        channel = client.get_channel(self.channelIdINT)  # Get the target channel
+
+        wait_time = (self.datetime - now).total_seconds()
+        print(f"Next message in {wait_time:.2f} seconds")
+
+        while not client.is_closed():
+            if self.datetime:
+                try:
+                    await asyncio.sleep(wait_time)  # Wait until the scheduled time
+                    await channel.send("哈囉！我來提醒你要開會囉")  # Send the message
+                    print('Message sent')
+                    self.cancel()
+                except asyncio.CancelledError:
+                    print("Scheduled message task was canceled.")
+                    break  # Exit the loop if canceled
+
+def checkDuplicateMeet(meetTimeSTR):
+    if meetTimeSTR in meet_instances:
+        return True
+    else:
+        return False
+
 # Send msgSTR to multiple Loki project concurrently
 def processMsg(msgSTR):
     proj = ""
@@ -129,6 +177,23 @@ class BotClient(discord.Client):
                             replySTR = "抱歉，這好像不是我能處理的問題喔！"
                         elif resultDICT["response"] != [] and resultDICT["source"] != ["LLM_reply"]:
                             replySTR = resultDICT["response"][0]
+                            intentSTR = resultDICT["intent"][0]
+                            meetDATETIME = resultDICT["time"][0]
+                            if intentSTR == "set":
+                                if checkDuplicateMeet(str(meetDATETIME)):
+                                     replySTR = "該時段已經有會議了喔！"
+
+                                else:
+                                    newMeet = meet(meetDATETIME)
+                                    newMeet.start()
+                                    meet_instances[str(meetDATETIME)] = newMeet
+                            elif intentSTR == "cancel":
+                                if checkDuplicateMeet(str(meetDATETIME)):
+                                    del meet_instances[str(meetDATETIME)]
+                                    #print(meet_instances)
+                                else:
+                                    replySTR = "該時段沒有會議！"
+
                         else:
                             assistantSTR = "！"
                             userSTR = msgSTR
@@ -136,8 +201,9 @@ class BotClient(discord.Client):
                     else:
                         replySTR = "Bruh you alright?"
 
-                except Exception:
+                except Exception as e:
                     replySTR = "我是預設的回應字串…你會看到我這串字，肯定是出了什麼錯！"
+                    print(e)
 
             await message.reply(replySTR)
 

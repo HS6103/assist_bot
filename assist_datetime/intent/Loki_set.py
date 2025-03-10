@@ -21,6 +21,7 @@ from importlib.util import spec_from_file_location
 from random import sample
 import json
 import os
+import datetime
 
 INTENT_NAME = "set"
 CWD_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -77,10 +78,11 @@ def arg2Time(argSTR):
     articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
     if articutResultDICT["time"] != [[]]:
         datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
+        datetimeOBJ = datetime.datetime.strptime(datetimeSTR, "%Y-%m-%d %H:%M:%S")
     else:
-        datetimeSTR = ""
+        datetimeOBJ = None
 
-    return datetimeSTR
+    return datetimeOBJ
 
 def getReply(utterance, args):
     replySTR = ""
