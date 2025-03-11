@@ -171,3 +171,6 @@ cython_debug/
 
 # Loki credentials
 account.info
+
+# doc for myself
+bot_command_linux.txt
