@@ -99,7 +99,7 @@ def getReply(utterance, args):
 
 def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolkitDICT={}):
     debugInfo(inputSTR, utterance)
-    if utterance == "[這禮拜]要開會":
+    if utterance == "[這禮拜][也]要開會":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
