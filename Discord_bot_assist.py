@@ -39,7 +39,7 @@ class meet():
             self.task.cancel()
             self.task = None
 
-    def getdatetime(self):
+    def getDatetime(self):
         return self.datetime
 
     async def notify(self):
@@ -54,7 +54,7 @@ class meet():
             if self.datetime:
                 try:
                     await asyncio.sleep(wait_time)  # Wait until the scheduled time
-                    await channel.send("哈囉！我來提醒你要開會囉")  # Send the message
+                    await channel.send("哈囉！我來提醒各位要開會囉")  # Send the message
                     print('Message sent')
                     self.cancel()
                 except asyncio.CancelledError:
@@ -177,11 +177,17 @@ class BotClient(discord.Client):
                 logging.debug(resultDICT)
                 try:
                     if resultDICT:
-                        if resultDICT["intent"] == ['']:
+                        if "intent" not in resultDICT.keys():
                             replySTR = "抱歉，這好像跟我的工作無關，要閒聊請去找真人喔 <3"
+                            self.mscDICT[message.author.id]["false_count"] += 1
+                            if self.mscDICT[message.author.id]["false_count"] == 4:
+                                replySTR = "你再吵一次我就不理你了喔！"
+                            if self.mscDICT[message.author.id]["false_count"] >=5:
+                                return None
                         elif resultDICT["intent"] != []:
                             replySTR = resultDICT["response"][0]
                             intentSTR = resultDICT["intent"][0]
+                            self.mscDICT[message.author.id]["false_count"] = 0
                             # 預約會議
                             if intentSTR == "set":
                                 if "time" in resultDICT["intent"]:
@@ -212,7 +218,8 @@ class BotClient(discord.Client):
                                         newMeet.start()
                                         meet_instances[str(meetDATETIME)] = newMeet
                                         replySTR = f"好的，我會提醒你{resultDICT['time'][0][1]}要開會！"
-
+                                        
+                            # 取消會議提醒
                             elif intentSTR == "cancel":
                                 if checkDuplicateMeet(str(meetDATETIME)):
                                     meet_instances[str(meetDATETIME)].cancel()
@@ -227,6 +234,7 @@ class BotClient(discord.Client):
                             #replySTR = llmCall(accountDICT["username"], assistantSTR, userSTR)
                     else:
                         replySTR = "抱歉，這好像跟我的工作無關，要閒聊請去找真人喔 <3"
+                        self.mscDICT[message.author.id]["false_count"] += 1
 
                 except Exception as e:
                     replySTR = "我是預設的回應字串…你會看到我這串字，肯定是出了什麼錯！"
