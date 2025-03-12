@@ -22,7 +22,6 @@ from random import sample
 import json
 import os
 import datetime
-from Loki_time import arg2Time
 
 INTENT_NAME = "inquiry"
 CWD_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -94,7 +93,6 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["time"] = arg2Time(args[0])
             resultDICT["intent"] = INTENT_NAME
 
     if utterance == "[今天]什麼[時候]開會":
@@ -104,7 +102,6 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["time"] = arg2Time(args[0])
             resultDICT["intent"] = INTENT_NAME
 
     if utterance == "[今天]幾[點]開會":
@@ -114,7 +111,6 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["time"] = arg2Time(args[0])
             resultDICT["intent"] = INTENT_NAME
 
     if utterance == "[今天]要開會嗎":
@@ -124,7 +120,6 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["time"] = arg2Time(args[0])
             resultDICT["intent"] = INTENT_NAME
 
     return resultDICT

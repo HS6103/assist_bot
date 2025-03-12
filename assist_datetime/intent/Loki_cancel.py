@@ -19,7 +19,6 @@
 from importlib.util import module_from_spec
 from importlib.util import spec_from_file_location
 from random import sample
-from Loki_time import arg2Time
 from ArticutAPI import Articut
 import json
 import os
@@ -96,7 +95,6 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["source"] = "reply"
         else:
             resultDICT["response"] = f"好的，我會取消{args[0]}的會議提醒！"
-            resultDICT["time"] = arg2Time(args[0])
             resultDICT["intent"] = INTENT_NAME
 
     if utterance == "[這禮拜]不開會":
@@ -107,7 +105,6 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["source"] = "reply"
         else:
             resultDICT["response"] = f"好的，我會取消{args[0]}的會議提醒！"
-            resultDICT["time"] = arg2Time(args[0])
             resultDICT["intent"] = INTENT_NAME
 
     if utterance == "取消[這禮拜]的[會議]":
@@ -118,7 +115,6 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["source"] = "reply"
         else:
             resultDICT["response"] = f"好的，我會取消{args[0]}的會議提醒！"
-            resultDICT["time"] = arg2Time(args[0])
             resultDICT["intent"] = INTENT_NAME
 
     return resultDICT

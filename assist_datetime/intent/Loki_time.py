@@ -135,8 +135,10 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
         else:
             if args[1] == '半':
                 inputSTR = f"{args[0]}點半"
-                resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
-                resultDICT["intent"].append("time")
+            else:
+                inputSTR = f"{args[0]}點"
+            resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
+            resultDICT["intent"].append("time")
 
     if utterance == "[十點]":
         if CHATBOT:

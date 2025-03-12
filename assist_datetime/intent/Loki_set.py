@@ -19,7 +19,7 @@
 from importlib.util import module_from_spec
 from importlib.util import spec_from_file_location
 from random import sample
-from Loki_time import arg2Time
+
 import json
 import os
 import datetime
