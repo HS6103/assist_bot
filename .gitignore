@@ -169,8 +169,10 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-# Loki credentials
+# Loki
 account.info
+backup_*
+intent_new
 
 # doc for myself
 bot_command_linux.txt
