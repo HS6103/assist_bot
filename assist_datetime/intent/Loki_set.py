@@ -19,6 +19,7 @@
 from importlib.util import module_from_spec
 from importlib.util import spec_from_file_location
 from random import sample
+from Loki_time import arg2Time
 import json
 import os
 import datetime
@@ -74,18 +75,6 @@ def debugInfo(inputSTR, utterance):
     if ACCOUNT_DICT["debug"]:
         print("[{}] {} ===> {}".format(INTENT_NAME, inputSTR, utterance))
 
-# 將時間詞轉為 datetime 格式
-def arg2Time(argSTR):
-    articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
-    if articutResultDICT["time"] != [[]]:
-        datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
-        if "晚" in argSTR:
-            datetimeOBJ = datetime.datetime.strptime(datetimeSTR, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(hours=12)
-    else:
-        datetimeOBJ = None
-
-    return datetimeOBJ
-
 def getReply(utterance, args):
     replySTR = ""
     try:
@@ -99,16 +88,27 @@ def getReply(utterance, args):
 
 def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolkitDICT={}):
     debugInfo(inputSTR, utterance)
-    if utterance == "[這禮拜][也]要開會":
+    if utterance == "每個[禮拜二]開":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["response"] = f"好的，我會提醒你{args[0]}要開會！"
-            resultDICT["time"] = arg2Time(args[0])
-            resultDICT["intent"] = INTENT_NAME
+            resultDICT["response"] = f"好的，我會提醒你每個{args[0]}要開會！"
+            resultDICT["repeat"] = True
+            resultDICT["intent"] = "set"
+
+    if utterance == "開會":
+        if CHATBOT:
+            replySTR = getReply(utterance, args)
+            if replySTR:
+                resultDICT["response"] = replySTR
+                resultDICT["source"] = "reply"
+        else:
+            resultDICT["response"] = "好的，我會提醒你{0}要開會！"
+            resultDICT["intent"] = ["set"]
+            resultDICT["repeat"] = False
 
     return resultDICT
 

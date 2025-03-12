@@ -21,12 +21,14 @@ scheduled_task = None  # Global variable to store the scheduled task
 meet_instances = {} # Store meet instances
 
 class meet():
-    def __init__(self,time):
+    def __init__(self,time,repeat=False,participant=None):
         self.datetime =  time
         self.todoLIST = []
         self.channelIdINT = int(os.getenv("channel_id"))
         self.participant = ""
         self.task = None
+        self.repeat = repeat
+        self.participant = participant
 
     def start(self):
         if self.task is None:
@@ -83,7 +85,6 @@ def processMsg(msgSTR):
     final_result = {}
 
     for result in results:
-        if "response" in result and result["response"] != ['']:
             final_result.update(result)  # Merge the result
 
     return final_result
@@ -114,8 +115,9 @@ class BotClient(discord.Client):
         清空與 messageAuthorID 之間的對話記錄
         '''
         templateDICT = {    "id": messageAuthorID,
-                             "updatetime" : datetime.now(),
+                             "updatetime" : datetime.datetime.now(),
                              "latestQuest": "",
+                             "latestIntent":[],
                              "false_count" : 0
         }
         return templateDICT
@@ -168,24 +170,49 @@ class BotClient(discord.Client):
 # ##########非初次對話：這裡用 Loki 計算語意
             else: #開始處理正式對話
                 #從這裡開始接上 NLU 模型
+                if message.author.id not in self.mscDICT.keys():
+                    self.mscDICT[message.author.id] = self.resetMSCwith(message.author.id)
                 resultDICT = processMsg(msgSTR)
                 logging.debug("######\nLoki 處理結果如下：")
                 logging.debug(resultDICT)
                 try:
                     if resultDICT:
-                        if resultDICT["response"] == ['']:
-                            replySTR = "抱歉，這好像不是我能處理的問題喔！"
-                        elif resultDICT["response"] != [] and resultDICT["source"] != ["LLM_reply"]:
+                        if resultDICT["intent"] == ['']:
+                            replySTR = "抱歉，這好像跟我的工作無關，要閒聊請去找真人喔 <3"
+                        elif resultDICT["intent"] != []:
                             replySTR = resultDICT["response"][0]
                             intentSTR = resultDICT["intent"][0]
-                            meetDATETIME = resultDICT["time"][0]
+                            # 預約會議
                             if intentSTR == "set":
-                                if checkDuplicateMeet(str(meetDATETIME)):
-                                     replySTR = "該時段已經有會議了喔！"
+                                if "time" in resultDICT["intent"]:
+                                    meetDATETIME = resultDICT["time"][0][0]
+                                    if checkDuplicateMeet(str(meetDATETIME)):
+                                        replySTR = "該時段已經有會議了喔！"
+                                    elif meetDATETIME < datetime.datetime.now():
+                                        replySTR = "你預約的時間已經過了喔！"
+                                    else:
+                                        newMeet = meet(meetDATETIME,resultDICT["repeat"][0])
+                                        newMeet.start()
+                                        meet_instances[str(meetDATETIME)] = newMeet
+                                        replySTR = replySTR.format(resultDICT["time"][0][1])
+                                        self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                 else:
-                                    newMeet = meet(meetDATETIME)
-                                    newMeet.start()
-                                    meet_instances[str(meetDATETIME)] = newMeet
+                                    replySTR = "好勒，啊那什麼時候開會？"
+                                    self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+                            
+                            elif intentSTR == "time":
+                                if self.mscDICT[message.author.id]["latestIntent"] == "set":
+                                    meetDATETIME = resultDICT["time"][0][0]
+                                    if checkDuplicateMeet(str(meetDATETIME)):
+                                        replySTR = "該時段已經有會議了喔！"
+                                    elif meetDATETIME < datetime.datetime.now():
+                                        replySTR = "你預約的時間已經過了喔！"
+                                    else:
+                                        newMeet = meet(meetDATETIME)
+                                        newMeet.start()
+                                        meet_instances[str(meetDATETIME)] = newMeet
+                                        replySTR = f"好的，我會提醒你{resultDICT['time'][0][1]}要開會！"
+
                             elif intentSTR == "cancel":
                                 if checkDuplicateMeet(str(meetDATETIME)):
                                     meet_instances[str(meetDATETIME)].cancel()
@@ -199,11 +226,11 @@ class BotClient(discord.Client):
                             userSTR = msgSTR
                             #replySTR = llmCall(accountDICT["username"], assistantSTR, userSTR)
                     else:
-                        replySTR = "抱歉，我看不太懂，請再說一次試試看？"
+                        replySTR = "抱歉，這好像跟我的工作無關，要閒聊請去找真人喔 <3"
 
                 except Exception as e:
                     replySTR = "我是預設的回應字串…你會看到我這串字，肯定是出了什麼錯！"
-                    print(e)
+                    print(f"Error:{type(e).__name__}:{e}")
 
             await message.reply(replySTR)
 

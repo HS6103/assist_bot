@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-    Loki module for inquiry
+    Loki module for time
 
     Input:
         inputSTR      str,
@@ -19,12 +19,11 @@
 from importlib.util import module_from_spec
 from importlib.util import spec_from_file_location
 from random import sample
+import datetime
 import json
 import os
-import datetime
-from Loki_time import arg2Time
 
-INTENT_NAME = "inquiry"
+INTENT_NAME = "time"
 CWD_PATH = os.path.dirname(os.path.abspath(__file__))
 
 def import_from_path(module_name, file_path):
@@ -69,6 +68,20 @@ if os.path.exists(replyPathSTR):
         print("[ERROR] reply_{}.json => {}".format(INTENT_NAME, str(e)))
 CHATBOT = True if replyDICT else False
 
+# 將時間詞轉為 datetime 格式
+def arg2Time(argSTR):
+    keywords = ["晚", "凌晨"]
+    articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
+    if articutResultDICT["time"] != [[]]:
+        datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
+        datetimeOBJ = datetime.datetime.strptime(datetimeSTR, "%Y-%m-%d %H:%M:%S")
+        if any(word in argSTR for word in keywords) and 0 < datetimeOBJ.hour < 13:
+            datetimeOBJ += datetime.timedelta(hours=12)
+    else:
+        datetimeOBJ = None
+
+    return datetimeOBJ
+
 # 將符合句型的參數列表印出。這是 debug 或是開發用的。
 def debugInfo(inputSTR, utterance):
     if ACCOUNT_DICT["debug"]:
@@ -87,45 +100,66 @@ def getReply(utterance, args):
 
 def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolkitDICT={}):
     debugInfo(inputSTR, utterance)
-    if utterance == "[今天]什麼[時候]要開會":
+    if "intent" not in resultDICT.keys():
+        resultDICT["intent"] = []
+        
+    if utterance == "[10].":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["time"] = arg2Time(args[0])
-            resultDICT["intent"] = INTENT_NAME
+            inputSTR = f"{args[0]}點"
+            resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
+            resultDICT["intent"].append("time")
 
-    if utterance == "[今天]什麼[時候]開會":
+    if utterance == "[10].[40]":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
-        else:
-            resultDICT["time"] = arg2Time(args[0])
-            resultDICT["intent"] = INTENT_NAME
+        else: 
+            inputSTR = f"{args[0]}點{args[1]}分"
+            resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
+            resultDICT["intent"].append("time")
 
-    if utterance == "[今天]幾[點]開會":
-        if CHATBOT:
-            replySTR = getReply(utterance, args)
-            if replySTR:
-                resultDICT["response"] = replySTR
-                resultDICT["source"] = "reply"
-        else:
-            resultDICT["time"] = arg2Time(args[0])
-            resultDICT["intent"] = INTENT_NAME
 
-    if utterance == "[今天]要開會嗎":
+    if utterance == "[10].[半]":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["time"] = arg2Time(args[0])
-            resultDICT["intent"] = INTENT_NAME
+            if args[1] == '半':
+                inputSTR = f"{args[0]}點半"
+                resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
+                resultDICT["intent"].append("time")
+
+    if utterance == "[十點]":
+        if CHATBOT:
+            replySTR = getReply(utterance, args)
+            if replySTR:
+                resultDICT["response"] = replySTR
+                resultDICT["source"] = "reply"
+        else:
+            resultDICT["time"] = (arg2Time(inputSTR),args[0])
+            resultDICT["intent"].append("time")
+
+
+    if utterance == "[早上][10].":
+        if CHATBOT:
+            replySTR = getReply(utterance, args)
+            if replySTR:
+                resultDICT["response"] = replySTR
+                resultDICT["source"] = "reply"
+        else:
+            inputSTR = f"{args[0]}{args[1]}點"
+            resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
+            resultDICT["intent"].append("time")
+
 
     return resultDICT
 
@@ -133,5 +167,5 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
 if __name__ == "__main__":
     from pprint import pprint
 
-    resultDICT = getResult("今天幾點開會", "[今天]幾[點]開會", [], {}, {})
+    resultDICT = getResult("10.", "[10].", [], {}, {})
     pprint(resultDICT)

@@ -19,6 +19,7 @@
 from importlib.util import module_from_spec
 from importlib.util import spec_from_file_location
 from random import sample
+from Loki_time import arg2Time
 from ArticutAPI import Articut
 import json
 import os
@@ -73,18 +74,6 @@ CHATBOT = True if replyDICT else False
 def debugInfo(inputSTR, utterance):
     if ACCOUNT_DICT["debug"]:
         print("[{}] {} ===> {}".format(INTENT_NAME, inputSTR, utterance))
-
-def arg2Time(argSTR):
-    articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
-    if articutResultDICT["time"] != [[]]:
-        datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
-        if "晚" in argSTR:
-            datetimeOBJ = datetime.datetime.strptime(datetimeSTR, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(hours=12)
-    else:
-        datetimeOBJ = None
-
-    return datetimeOBJ
-
 
 def getReply(utterance, args):
     replySTR = ""
