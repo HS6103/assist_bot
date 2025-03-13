@@ -24,8 +24,7 @@ class meet():
     def __init__(self,time,repeat=False,participant=None):
         self.datetime =  time
         self.todoLIST = []
-        self.channelIdINT = int(os.getenv("channel_id"))
-        self.participant = ""
+        self.channelIDINT = int(os.getenv("channel_id"))
         self.task = None
         self.repeat = repeat
         self.participant = participant
@@ -33,29 +32,45 @@ class meet():
     def start(self):
         if self.task is None:
             self.task = asyncio.create_task(self.notify())
+            meet_instances[str(self.datetime)] = self
 
     def cancel(self):
         if self.task:
+            if self.repeat == True:
+                newTime = self.datetime + datetime.timedelta(weeks=1)  # 預設是週會，一週重複一次
+                newmeet = meet(newTime, repeat=True)
+                newmeet.start()
             self.task.cancel()
             self.task = None
 
     def getDatetime(self):
         return self.datetime
+    
+    def resetDatetime(self,newTime):
+        self.datetime = newTime
 
     async def notify(self):
         now = datetime.datetime.now()
         await client.wait_until_ready()  # Ensure bot is logged in
-        channel = client.get_channel(self.channelIdINT)  # Get the target channel
-
+        channel = client.get_channel(self.channelIDINT)  # Get the target channel
+        
         wait_time = (self.datetime - now).total_seconds()
-        print(f"Next message in {wait_time:.2f} seconds")
+        if wait_time <= 0:
+            self.resetDatetime(self.datetime + datetime.timedelta(weeks=1))
+            print(self.getDatetime())
+            wait_time = (self.datetime - now).total_seconds()
 
         while not client.is_closed():
             if self.datetime:
                 try:
+                    print(f"Next notification in {wait_time}")
                     await asyncio.sleep(wait_time)  # Wait until the scheduled time
                     await channel.send("哈囉！我來提醒各位要開會囉")  # Send the message
                     print('Message sent')
+                    if self.repeat == True:
+                        newTime = self.datetime + datetime.timedelta(weeks=1)  # 預設是週會，一週重複一次
+                        newmeet = meet(newTime, repeat=True)
+                        newmeet.start()
                     self.cancel()
                 except asyncio.CancelledError:
                     print("Scheduled message task was canceled.")
@@ -180,26 +195,31 @@ class BotClient(discord.Client):
                         if "intent" not in resultDICT.keys():
                             replySTR = "抱歉，這好像跟我的工作無關，要閒聊請去找真人喔 <3"
                             self.mscDICT[message.author.id]["false_count"] += 1
-                            if self.mscDICT[message.author.id]["false_count"] == 4:
-                                replySTR = "你再吵一次我就不理你了喔！"
-                            if self.mscDICT[message.author.id]["false_count"] >=5:
-                                return None
                         elif resultDICT["intent"] != []:
                             replySTR = resultDICT["response"][0]
                             intentSTR = resultDICT["intent"][0]
                             self.mscDICT[message.author.id]["false_count"] = 0
                             # 預約會議
                             if intentSTR == "set":
+                                repeatBOOL = resultDICT["repeat"][0]
                                 if "time" in resultDICT["intent"]:
                                     meetDATETIME = resultDICT["time"][0][0]
                                     if checkDuplicateMeet(str(meetDATETIME)):
                                         replySTR = "該時段已經有會議了喔！"
                                     elif meetDATETIME < datetime.datetime.now():
-                                        replySTR = "你預約的時間已經過了喔！"
+                                        if repeatBOOL == False:
+                                            replySTR = "你預約的時間已經過了喔！"
+                                        else:
+                                            meetDATETIME += datetime.timedelta(weeks=1)
+                                            newMeet = meet(meetDATETIME,repeatBOOL)
+                                            newMeet.start()
+                                            print(meet_instances)
+                                            replySTR = replySTR.format(resultDICT["time"][0][1])
+                                            self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                     else:
-                                        newMeet = meet(meetDATETIME,resultDICT["repeat"][0])
+                                        newMeet = meet(meetDATETIME,repeatBOOL)
                                         newMeet.start()
-                                        meet_instances[str(meetDATETIME)] = newMeet
+                                        print(meet_instances)
                                         replySTR = replySTR.format(resultDICT["time"][0][1])
                                         self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                 else:
@@ -207,26 +227,47 @@ class BotClient(discord.Client):
                                     self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                             
                             elif intentSTR == "time":
+                                meetDATETIME = resultDICT["time"][0][0]
                                 if self.mscDICT[message.author.id]["latestIntent"] == "set":
-                                    meetDATETIME = resultDICT["time"][0][0]
                                     if checkDuplicateMeet(str(meetDATETIME)):
                                         replySTR = "該時段已經有會議了喔！"
                                     elif meetDATETIME < datetime.datetime.now():
                                         replySTR = "你預約的時間已經過了喔！"
                                     else:
-                                        newMeet = meet(meetDATETIME)
+                                        newMeet = meet(meetDATETIME,repeatBOOL)
                                         newMeet.start()
-                                        meet_instances[str(meetDATETIME)] = newMeet
-                                        replySTR = f"好的，我會提醒你{resultDICT['time'][0][1]}要開會！"
-                                        
+                                        replySTR = f"好的，我會提醒你{resultDICT['time'][0][1]}要開會!"
+
+                                elif self.mscDICT[message.author.id]["latestIntent"] == "cancel":
+                                    if checkDuplicateMeet(str(meetDATETIME)):
+                                        meet_instances[str(meetDATETIME)].cancel()
+                                        del meet_instances[str(meetDATETIME)]
+                                        replySTR = f"好的，已經幫你取消{resultDICT['time'][0][1]}的會議!"
+
+                                else:
+                                    replySTR = "抱歉，我看不懂你給我那個時間要做什麼，要閒聊請去找真人喔 <3"
+                                    self.mscDICT[message.author.id]["false_count"] += 1
+                                    
                             # 取消會議提醒
                             elif intentSTR == "cancel":
-                                if checkDuplicateMeet(str(meetDATETIME)):
-                                    meet_instances[str(meetDATETIME)].cancel()
-                                    del meet_instances[str(meetDATETIME)]
-                                    #print(meet_instances)
+                                if "time" in resultDICT["intent"]:
+                                    meetDATETIME = resultDICT["time"][0][0]
+                                    if checkDuplicateMeet(str(meetDATETIME)):
+                                        meet_instances[str(meetDATETIME)].cancel()
+                                        del meet_instances[str(meetDATETIME)]
+                                        replySTR = replySTR.format(resultDICT["time"][0][1])
+                                        self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+                                        print(meet_instances)
+                                    else:
+                                        replySTR = "該時段沒有會議！"
                                 else:
-                                    replySTR = "該時段沒有會議！"
+                                    replySTR = "你要取消什麼時候的會議呢？"
+                                    
+
+                        if self.mscDICT[message.author.id]["false_count"] == 4:
+                            replySTR = "你再吵一次我就不理你了喔！"
+                        if self.mscDICT[message.author.id]["false_count"] >=5:
+                            return None
 
                         else:
                             assistantSTR = "！"

@@ -86,7 +86,7 @@ def getReply(utterance, args):
 
 def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolkitDICT={}):
     debugInfo(inputSTR, utterance)
-    if utterance == "[今天]什麼[時候]要開會":
+    if utterance == "什麼[時候]要開會":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
@@ -95,7 +95,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
         else:
             resultDICT["intent"] = INTENT_NAME
 
-    if utterance == "[今天]什麼[時候]開會":
+    if utterance == "什麼[時候]開會":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
@@ -104,7 +104,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
         else:
             resultDICT["intent"] = INTENT_NAME
 
-    if utterance == "[今天]幾[點]開會":
+    if utterance == "幾[點]開會":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
@@ -113,7 +113,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
         else:
             resultDICT["intent"] = INTENT_NAME
 
-    if utterance == "[今天]要開會嗎":
+    if utterance == "要開會嗎":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
@@ -128,5 +128,5 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
 if __name__ == "__main__":
     from pprint import pprint
 
-    resultDICT = getResult("今天幾點開會", "[今天]幾[點]開會", [], {}, {})
+    resultDICT = getResult("今天幾點開會", "幾[點]開會", [], {}, {})
     pprint(resultDICT)

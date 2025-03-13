@@ -87,35 +87,35 @@ def getReply(utterance, args):
 
 def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolkitDICT={}):
     debugInfo(inputSTR, utterance)
-    if utterance == "[這禮拜][會議]暫停":
+    if utterance == "[會議]暫停":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["response"] = f"好的，我會取消{args[0]}的會議提醒！"
-            resultDICT["intent"] = INTENT_NAME
+            resultDICT["response"] = "好的，我會取消{0}的會議提醒！"
+            resultDICT["intent"] = [INTENT_NAME]
 
-    if utterance == "[這禮拜]不開會":
+    if utterance == "不開會":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["response"] = f"好的，我會取消{args[0]}的會議提醒！"
-            resultDICT["intent"] = INTENT_NAME
+            resultDICT["response"] = "好的，我會取消{0}的會議提醒！"
+            resultDICT["intent"] = [INTENT_NAME]
 
-    if utterance == "取消[這禮拜]的[會議]":
+    if utterance == "取消":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["response"] = f"好的，我會取消{args[0]}的會議提醒！"
-            resultDICT["intent"] = INTENT_NAME
+            resultDICT["response"] = "好的，我會取消{0}的會議提醒！"
+            resultDICT["intent"] = [INTENT_NAME]
 
     return resultDICT
 

@@ -88,16 +88,19 @@ def getReply(utterance, args):
 
 def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolkitDICT={}):
     debugInfo(inputSTR, utterance)
-    if utterance == "每個[禮拜二]開":
+    if utterance == "開[週會]":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["response"] = f"好的，我會提醒你每個{args[0]}要開會！"
-            resultDICT["repeat"] = True
-            resultDICT["intent"] = "set"
+            if args[0] in USER_DEFINED_DICT['as_meet']:
+                resultDICT["response"] = "好的，我會提醒你每個{0}要開週會！"
+                resultDICT["repeat"] = True
+                resultDICT["intent"] = [INTENT_NAME]
+            else:
+                pass
 
     if utterance == "開會":
         if CHATBOT:
@@ -107,7 +110,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["source"] = "reply"
         else:
             resultDICT["response"] = "好的，我會提醒你{0}要開會！"
-            resultDICT["intent"] = ["set"]
+            resultDICT["intent"] = [INTENT_NAME]
             resultDICT["repeat"] = False
 
     return resultDICT

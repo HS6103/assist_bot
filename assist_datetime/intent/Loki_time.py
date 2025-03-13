@@ -147,7 +147,11 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["time"] = (arg2Time(inputSTR),args[0])
+            if args[0].startswith('每'):
+                resultDICT["repeat"] = True
+                resultDICT["time"] = (arg2Time(args[0][1:]),args[0])
+            else:
+                resultDICT["time"] = (arg2Time(args[0]),args[0])
             resultDICT["intent"].append("time")
 
 
