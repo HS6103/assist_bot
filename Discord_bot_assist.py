@@ -21,7 +21,7 @@ scheduled_task = None  # Global variable to store the scheduled task
 meet_instances = {} # Store meet instances
 
 class meet():
-    def __init__(self,time,repeat=False,participant=None):
+    def __init__(self,time,repeat=False,participant="@everyone"):
         self.datetime =  time
         self.todoLIST = []
         self.channelIDINT = int(os.getenv("channel_id"))
@@ -68,8 +68,8 @@ class meet():
                 try:
                     print(f"Next notification at {str(self.datetime)}")
                     await asyncio.sleep(wait_time)  # Wait until the scheduled time
-                    await channel.send("哈囉！我來提醒各位要開會囉")  # Send the message
-                    print('Message sent')
+                    await channel.send(f"{self.participant} 哈囉！我來提醒各位要開會囉")  # Send the message
+                    print(f'Notification for {str(self.datetime)} sent')
                     if self.repeat == True:
                         self.setRepeat()
                     self.cancel()
