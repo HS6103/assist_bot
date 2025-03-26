@@ -70,8 +70,6 @@ class meet():
                     await asyncio.sleep(wait_time)  # Wait until the scheduled time
                     await channel.send(f"{self.participant} 哈囉！我來提醒各位要開會囉")  # Send the message
                     print(f'Notification for {str(self.datetime)} sent')
-                    if self.repeat == True:
-                        self.setRepeat()
                     self.cancel()
                 except asyncio.CancelledError:
                     print("Scheduled message task was canceled.")
