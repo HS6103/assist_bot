@@ -93,7 +93,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["intent"] = INTENT_NAME
+            resultDICT["intent"].append(INTENT_NAME)
 
     if utterance == "什麼[時候]開會":
         if CHATBOT:
@@ -102,7 +102,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["intent"] = INTENT_NAME
+            resultDICT["intent"].append(INTENT_NAME)
 
     if utterance == "幾[點]開會":
         if CHATBOT:
@@ -111,7 +111,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["intent"] = INTENT_NAME
+            resultDICT["intent"].append(INTENT_NAME)
 
     if utterance == "要開會嗎":
         if CHATBOT:
@@ -120,7 +120,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["intent"] = INTENT_NAME
+            resultDICT["intent"].append(INTENT_NAME)
 
     return resultDICT
 

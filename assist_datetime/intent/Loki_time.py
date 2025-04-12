@@ -100,8 +100,6 @@ def getReply(utterance, args):
 
 def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolkitDICT={}):
     debugInfo(inputSTR, utterance)
-    if "intent" not in resultDICT.keys():
-        resultDICT["intent"] = []
         
     if utterance == "[10].":
         if CHATBOT:
@@ -112,7 +110,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
         else:
             inputSTR = f"{args[0]}點"
             resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
-            resultDICT["intent"].append("time")
+            resultDICT["intent"].append(INTENT_NAME)
 
     if utterance == "[10].[40]":
         if CHATBOT:
@@ -123,7 +121,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
         else: 
             inputSTR = f"{args[0]}點{args[1]}分"
             resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
-            resultDICT["intent"].append("time")
+            resultDICT["intent"].append(INTENT_NAME)
 
 
     if utterance == "[10].[半]":
@@ -138,7 +136,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
             else:
                 inputSTR = f"{args[0]}點"
             resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
-            resultDICT["intent"].append("time")
+            resultDICT["intent"].append(INTENT_NAME)
 
     if utterance == "[十點]":
         if CHATBOT:
@@ -152,7 +150,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["time"] = (arg2Time(args[0][1:]),args[0])
             else:
                 resultDICT["time"] = (arg2Time(args[0]),args[0])
-            resultDICT["intent"].append("time")
+            resultDICT["intent"].append(INTENT_NAME)
 
 
     if utterance == "[早上][10].":
@@ -164,7 +162,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
         else:
             inputSTR = f"{args[0]}{args[1]}點"
             resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
-            resultDICT["intent"].append("time")
+            resultDICT["intent"].append(INTENT_NAME)
 
 
     return resultDICT
