@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-    Loki module for set
+    Loki module for meet
 
     Input:
         inputSTR      str,
@@ -25,7 +25,7 @@ import os
 import datetime
 import re
 
-INTENT_NAME = "set"
+INTENT_NAME = "meet"
 CWD_PATH = os.path.dirname(os.path.abspath(__file__))
 
 def import_from_path(module_name, file_path):
@@ -98,7 +98,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
             if args[0] in USER_DEFINED_DICT['as_meet']:
                 resultDICT["response"] = "好的，我會提醒你每個{0}要開週會！"
                 resultDICT["repeat"] = True
-                resultDICT["intent"] = [INTENT_NAME]
+                resultDICT["intent"].append(INTENT_NAME)
             else:
                 pass
 
@@ -110,7 +110,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["source"] = "reply"
         else:
             resultDICT["response"] = "好的，我會提醒你{0}要開會！"
-            resultDICT["intent"] = [INTENT_NAME]
+            resultDICT["intent"].append(INTENT_NAME)
             resultDICT["repeat"] = False
 
     return resultDICT
