@@ -176,3 +176,6 @@ intent_new
 
 # doc for myself
 bot_command_linux.txt
+
+#test/backup files
+backup.json
