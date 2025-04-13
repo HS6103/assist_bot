@@ -91,10 +91,6 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            if args[0] == None:
-                resultDICT["response"] = "請問什麼時候要提醒您呢？"
-            else:
-                resultDICT["response"] = "好的，我會在{0}提醒你！"
             resultDICT["intent"].append(INTENT_NAME)
 
     return resultDICT

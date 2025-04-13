@@ -20,21 +20,33 @@ logging.basicConfig(level=logging.DEBUG)
 
 scheduled_task = None  # Global variable to store the scheduled task
 meet_instances = {} # Store meet instances
-
+alarm_instances = {} # Store alarm instances
 class notification():
-    def __init__(self,time,repeat=False,participant="@everyone",eventType="alarm"):
+    def __init__(self,time,repeat=False,participant="@everyone",eventTypeSTR="alarm",contentSTR=""):
         self.datetime =  time
         self.todoLIST = []
-        self.channelIDINT = int(os.getenv("channel_id"))
+        self.channelID = int(os.getenv("channel_id"))
         self.task = None
         self.repeat = repeat
         self.participant = participant
-        self.eventType = eventType
+        self.eventType = eventTypeSTR
+        self.content = contentSTR
+    
+    def __getattribute__(self, name):
+        try:
+            # Attempt to get the attribute using the default behavior
+            return super().__getattribute__(name)
+        except AttributeError:
+            # Handle the case where the attribute does not exist
+            raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def start(self):
         if self.task is None:
             self.task = asyncio.create_task(self.notify())
-            meet_instances[str(self.datetime)] = self
+            if self.eventType == "meet":
+                meet_instances[str(self.datetime)] = self
+            else:
+                alarm_instances[str(self.datetime)] = self
 
     def cancel(self):
         if self.task:
@@ -42,14 +54,19 @@ class notification():
                 self.setRepeat()
             self.task.cancel()
             self.task = None
+        if self in meet_instances.values():
+            # Remove the instance from meet_instances after sending the notification
+            del meet_instances[str(self.datetime)]
+        else:
+            # Remove the instance from alarm_instances after sending the notification
+            del alarm_instances[str(self.datetime)]
+
+
 
     def setRepeat(self):
             newTime = self.datetime + datetime.timedelta(weeks=1)  # 預設是週會，一週重複一次
             newmeet = notification(newTime, repeat=True)
             newmeet.start()
-
-    def getDatetime(self):
-        return self.datetime
     
     def resetDatetime(self,newTime):
         self.datetime = newTime
@@ -60,7 +77,7 @@ class notification():
         return {
             "datetime": self.datetime.strftime("%Y-%m-%d %H:%M:%S"),  # Format as a string
             "todoLIST": self.todoLIST,
-            "channelIDINT": self.channelIDINT,
+            "channelID": self.channelID,
             "task": None,
             "repeat": self.repeat,
             "participant": self.participant,
@@ -70,7 +87,7 @@ class notification():
     async def notify(self):
         now = datetime.datetime.now()
         await client.wait_until_ready()  # Ensure bot is logged in
-        channel = client.get_channel(self.channelIDINT)  # Get the target channel
+        channel = client.get_channel(self.channelID)  # Get the target channel
         
         wait_time = (self.datetime - now).total_seconds()
         if wait_time <= 0:
@@ -81,19 +98,24 @@ class notification():
         while not client.is_closed():
             if self.datetime:
                 try:
-                    print(f"Next notification at {str(self.datetime)}")
+                    print(f"Notification for {str(self.datetime)} ready")
                     await asyncio.sleep(wait_time)  # Wait until the scheduled time
-                    await channel.send(f"{self.participant} 哈囉！我來提醒各位要開會囉")  # Send the message
-                    print(f'Notification for {str(self.datetime)} sent')
+                    if self.eventType == "meet":
+                        await channel.send(f"哈囉！我來提醒{self.participant}要開會囉")  # Send the message
+                    elif self.eventType == "alarm":
+                        await channel.send(f"哈囉！我來提醒{self.participant} 「{self.content}」！")
                     self.cancel()
+                    print(f'Notification for {str(self.datetime)} sent')
+                    
                 except asyncio.CancelledError:
                     print("Scheduled message task was canceled.")
                     break  # Exit the loop if canceled
 
-# Function to save meet_instances to a JSON file
+# Function to save set alarms / meets to a JSON file
 def save_notifications():
     # Convert all Notification objects to dictionaries
     notifications_data = {key: value.to_dict() for key, value in meet_instances.items()}
+    alarm_data = {key: value.to_dict() for key, value in alarm_instances.items()}
     
     with open("backup.json", "w") as json_file:
         json.dump(notifications_data, json_file, indent=4)
@@ -134,7 +156,9 @@ def getLokiResult(inputSTR, projSTR, filterLIST=[]):
         "response":[],
         "time":[],
         "intent":[],
-        "repeat":[]
+        "repeat":[],
+        "participant":[],
+        "content":[]
     }
 
     if projSTR == "datetime":
@@ -218,79 +242,129 @@ class BotClient(discord.Client):
                 logging.debug(resultDICT)
                 try:
                     if resultDICT:
-                        if "intent" not in resultDICT.keys():
-                            replySTR = "抱歉，這好像跟我的工作無關，要閒聊請去找真人喔 <3"
+                        # 不符合任何意圖
+                        if resultDICT["intent"] == []: 
+                            replySTR = "抱歉，我看不太懂你要我做什麼，要閒聊請去找真人喔 <3"
                             self.mscDICT[message.author.id]["false_count"] += 1
-                        elif resultDICT["intent"] != []:
+                        else:
                             replySTR = resultDICT["response"][0]
                             intentSTR = resultDICT["intent"][0]
                             self.mscDICT[message.author.id]["false_count"] = 0
-                            # 預約會議
-                            if "meet_adv" in resultDICT["intent"]:
+                            # 會議預約 + 一般提醒
+                            if "set_adv" in resultDICT["intent"] and "meet_adv" in resultDICT["intent"]:
                                 repeatBOOL = resultDICT["repeat"][0]
                                 if "time" in resultDICT["intent"]:
-                                    meetDATETIME = resultDICT["time"][0][0]
-                                    if checkDuplicateMeet(str(meetDATETIME)):
-                                        replySTR = "該時段已經有會議了喔！"
-                                    elif meetDATETIME < datetime.datetime.now():
+                                    alarmDATETIME = resultDICT["time"][0][0]
+                                    if alarmDATETIME < datetime.datetime.now():
                                         if repeatBOOL == False:
                                             replySTR = "你預約的時間已經過了喔！"
                                         else:
-                                            meetDATETIME += datetime.timedelta(weeks=1)
-                                            newMeet = notification(meetDATETIME,repeatBOOL,eventType="meet")
+                                            alarmDATETIME += datetime.timedelta(weeks=1)
+                                            newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet")
                                             newMeet.start()
                                             print(meet_instances)
                                             replySTR = replySTR.format(resultDICT["time"][0][1])
-                                            self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                     else:
-                                        newMeet = notification(meetDATETIME,repeatBOOL)
+                                        newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet")
                                         newMeet.start()
                                         print(meet_instances)
                                         replySTR = replySTR.format(resultDICT["time"][0][1])
-                                        self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                 else:
                                     replySTR = "好勒，啊那什麼時候開會？"
+
+                            # 純會議提醒
+                            elif "meet_adv" in resultDICT["intent"]:
+                                repeatBOOL = resultDICT["repeat"][0]
+                                if "time" in resultDICT["intent"]:
+                                    alarmDATETIME = resultDICT["time"][0][0]
+                                    if checkDuplicateMeet(str(alarmDATETIME)):
+                                        replySTR = "該時段已經有預約會議提醒了喔！"
+                                    elif alarmDATETIME < datetime.datetime.now():
+                                        if repeatBOOL == False:
+                                            replySTR = "你預約的時間已經過了喔！"
+                                        else:
+                                            alarmDATETIME += datetime.timedelta(weeks=1)
+                                            newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet")
+                                            newMeet.start()
+                                            print(meet_instances)
+                                            self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+                                            replySTR = replySTR.format(resultDICT["time"][0][1])
+                                    else:
+                                        newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet")
+                                        newMeet.start()
+                                        print(meet_instances)
+                                        self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+                                        replySTR = replySTR.format(resultDICT["time"][0][1])
+                                else:
                                     self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+                                    replySTR = "好勒，啊那什麼時候開會？"
+                            
+                            # 純一般提醒
+                            elif "set_adv" in resultDICT["intent"]:
+                                if "time" in resultDICT["intent"] and resultDICT["time"][0][0] != []:
+                                    alarmDATETIME = resultDICT["time"][0][0]
+                                    replySTR = replySTR.format(resultDICT["time"][0][1])
+                                    newAlarm = notification(alarmDATETIME)
+                                    newAlarm.start()
+                                    print(alarm_instances)
+                                    self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+                                else:
+                                    self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+                                    pass  # 'response': ['請問什麼時候要提醒您呢？']
+                            
                             
                             elif intentSTR == "time":
-                                meetDATETIME = resultDICT["time"][0][0]
-                                if self.mscDICT[message.author.id]["latestIntent"] == "meet_adv":
-                                    if checkDuplicateMeet(str(meetDATETIME)):
+                                alarmDATETIME = resultDICT["time"][0][0]
+                                latestIntent = self.mscDICT[message.author.id]["latestIntent"]
+                                if latestIntent == "meet_adv":
+                                    if checkDuplicateMeet(str(alarmDATETIME)):
                                         replySTR = "該時段已經有會議了喔！"
-                                    elif meetDATETIME < datetime.datetime.now():
+                                    elif alarmDATETIME < datetime.datetime.now():
                                         replySTR = "你預約的時間已經過了喔！"
                                     else:
-                                        newMeet = notification(meetDATETIME)
+                                        newMeet = notification(alarmDATETIME)
                                         newMeet.start()
                                         print(meet_instances)
                                         replySTR = f"好的，我會提醒你{resultDICT['time'][0][1]}要開會!"
+                                        self.mscDICT[message.author.id]["latestIntent"] = intentSTR
 
-                                elif self.mscDICT[message.author.id]["latestIntent"] == "cancel":
-                                    if checkDuplicateMeet(str(meetDATETIME)):
-                                        meet_instances[str(meetDATETIME)].cancel()
-                                        del meet_instances[str(meetDATETIME)]
+                                elif latestIntent == "cancel":
+                                    if checkDuplicateMeet(str(alarmDATETIME)):
+                                        meet_instances[str(alarmDATETIME)].cancel()
+                                        del meet_instances[str(alarmDATETIME)]
                                         print(meet_instances)
-                                        replySTR = f"好的，已經幫你取消{resultDICT['time'][0][1]}的會議！"
+                                        replySTR = f"好的，已經幫你取消{resultDICT['time'][0][1]}的提醒！"
+                                        self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+
+                                
+                                elif latestIntent == "set_adv":
+                                    if alarmDATETIME < datetime.datetime.now():
+                                        replySTR = "你預約的時間已經過了喔！"
+                                    else:
+                                        newAlarm = notification(alarmDATETIME)
+                                        newAlarm.start()
+                                        print(alarm_instances)
+                                        replySTR = f"好的，我會在{resultDICT['time'][0][1]}提醒你！"
+                                        self.mscDICT[message.author.id]["latestIntent"] = intentSTR
 
 
                                 else:
-                                    replySTR = "抱歉，我看不懂你給我那個時間要做什麼，要閒聊請去找真人喔 <3"
+                                    replySTR = "抱歉，我看不懂你給我那個時間要做什麼！"
                                     self.mscDICT[message.author.id]["false_count"] += 1
                                     
                             # 取消會議提醒
                             elif intentSTR == "cancel":
                                 if "time" in resultDICT["intent"]:
-                                    meetDATETIME = resultDICT["time"][0][0]
-                                    if checkDuplicateMeet(str(meetDATETIME)):
-                                        meet_instances[str(meetDATETIME)].cancel()
-                                        del meet_instances[str(meetDATETIME)]
+                                    alarmDATETIME = resultDICT["time"][0][0]
+                                    if checkDuplicateMeet(str(alarmDATETIME)):
+                                        meet_instances[str(alarmDATETIME)].cancel()
+                                        del meet_instances[str(alarmDATETIME)]
                                         replySTR = replySTR.format(resultDICT["time"][0][1])
                                         print(meet_instances)
                                     else:
                                         replySTR = "該時段沒有會議！"
                                 else:
                                     replySTR = "你要取消什麼時候的會議呢？"
-                                self.mscDICT[message.author.id]["latestIntent"] = intentSTR
 
                         # Nonsense Handling :)
                         if self.mscDICT[message.author.id]["false_count"] == 4:
@@ -298,10 +372,6 @@ class BotClient(discord.Client):
                         if self.mscDICT[message.author.id]["false_count"] >=5:
                             return None
 
-                        else:
-                            assistantSTR = "！"
-                            userSTR = msgSTR
-                            #replySTR = llmCall(accountDICT["username"], assistantSTR, userSTR)
                     else:
                         replySTR = "抱歉，這好像跟我的工作無關，要閒聊請去找真人喔 <3"
                         self.mscDICT[message.author.id]["false_count"] += 1

@@ -109,7 +109,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["source"] = "reply"
         else:
             inputSTR = f"{args[0]}點"
-            resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
+            resultDICT["time"].append(arg2Time(inputSTR),inputSTR)
             resultDICT["intent"].append(INTENT_NAME)
 
     if utterance == "[10].[40]":
@@ -120,7 +120,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["source"] = "reply"
         else: 
             inputSTR = f"{args[0]}點{args[1]}分"
-            resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
+            resultDICT["time"].append(arg2Time(inputSTR),inputSTR)
             resultDICT["intent"].append(INTENT_NAME)
 
 
@@ -135,7 +135,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 inputSTR = f"{args[0]}點半"
             else:
                 inputSTR = f"{args[0]}點"
-            resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
+            resultDICT["time"].append(arg2Time(inputSTR),inputSTR)
             resultDICT["intent"].append(INTENT_NAME)
 
     if utterance == "[十點]":
@@ -161,7 +161,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
                 resultDICT["source"] = "reply"
         else:
             inputSTR = f"{args[0]}{args[1]}點"
-            resultDICT["time"] = (arg2Time(inputSTR),inputSTR)
+            resultDICT["time"].append(arg2Time(inputSTR),inputSTR)
             resultDICT["intent"].append(INTENT_NAME)
 
 
