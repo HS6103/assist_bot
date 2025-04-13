@@ -4,6 +4,7 @@
 import logging
 import discord
 import json
+import atexit
 import re
 import datetime
 import concurrent.futures
@@ -20,14 +21,15 @@ logging.basicConfig(level=logging.DEBUG)
 scheduled_task = None  # Global variable to store the scheduled task
 meet_instances = {} # Store meet instances
 
-class meet():
-    def __init__(self,time,repeat=False,participant="@everyone"):
+class notification():
+    def __init__(self,time,repeat=False,participant="@everyone",eventType="alarm"):
         self.datetime =  time
         self.todoLIST = []
         self.channelIDINT = int(os.getenv("channel_id"))
         self.task = None
         self.repeat = repeat
         self.participant = participant
+        self.eventType = eventType
 
     def start(self):
         if self.task is None:
@@ -43,7 +45,7 @@ class meet():
 
     def setRepeat(self):
             newTime = self.datetime + datetime.timedelta(weeks=1)  # 預設是週會，一週重複一次
-            newmeet = meet(newTime, repeat=True)
+            newmeet = notification(newTime, repeat=True)
             newmeet.start()
 
     def getDatetime(self):
@@ -51,6 +53,19 @@ class meet():
     
     def resetDatetime(self,newTime):
         self.datetime = newTime
+
+    # Method to convert the Notification object to a dictionary, which can be saved to JSON
+    def to_dict(self):
+        # Convert datetime to string for JSON serialization
+        return {
+            "datetime": self.datetime.strftime("%Y-%m-%d %H:%M:%S"),  # Format as a string
+            "todoLIST": self.todoLIST,
+            "channelIDINT": self.channelIDINT,
+            "task": None,
+            "repeat": self.repeat,
+            "participant": self.participant,
+            "eventType": self.eventType
+        }
 
     async def notify(self):
         now = datetime.datetime.now()
@@ -74,6 +89,15 @@ class meet():
                 except asyncio.CancelledError:
                     print("Scheduled message task was canceled.")
                     break  # Exit the loop if canceled
+
+# Function to save meet_instances to a JSON file
+def save_notifications():
+    # Convert all Notification objects to dictionaries
+    notifications_data = {key: value.to_dict() for key, value in meet_instances.items()}
+    
+    with open("backup.json", "w") as json_file:
+        json.dump(notifications_data, json_file, indent=4)
+    print("Notifications saved to backup.json")
 
 def checkDuplicateMeet(meetTimeSTR):
     if meetTimeSTR in meet_instances:
@@ -107,7 +131,10 @@ def getLokiResult(inputSTR, projSTR, filterLIST=[]):
     splitLIST = ["！", "，", "。", "？", "!", ",", "\n", "；", "\u3000", ";"] #
     # 設定參考資料
     refDICT = { # value 必須為 list
-        #"key": []
+        "response":[],
+        "time":[],
+        "intent":[],
+        "repeat":[]
     }
 
     if projSTR == "datetime":
@@ -199,7 +226,7 @@ class BotClient(discord.Client):
                             intentSTR = resultDICT["intent"][0]
                             self.mscDICT[message.author.id]["false_count"] = 0
                             # 預約會議
-                            if intentSTR == "set":
+                            if "meet_adv" in resultDICT["intent"]:
                                 repeatBOOL = resultDICT["repeat"][0]
                                 if "time" in resultDICT["intent"]:
                                     meetDATETIME = resultDICT["time"][0][0]
@@ -210,13 +237,13 @@ class BotClient(discord.Client):
                                             replySTR = "你預約的時間已經過了喔！"
                                         else:
                                             meetDATETIME += datetime.timedelta(weeks=1)
-                                            newMeet = meet(meetDATETIME,repeatBOOL)
+                                            newMeet = notification(meetDATETIME,repeatBOOL,eventType="meet")
                                             newMeet.start()
                                             print(meet_instances)
                                             replySTR = replySTR.format(resultDICT["time"][0][1])
                                             self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                     else:
-                                        newMeet = meet(meetDATETIME,repeatBOOL)
+                                        newMeet = notification(meetDATETIME,repeatBOOL)
                                         newMeet.start()
                                         print(meet_instances)
                                         replySTR = replySTR.format(resultDICT["time"][0][1])
@@ -227,13 +254,13 @@ class BotClient(discord.Client):
                             
                             elif intentSTR == "time":
                                 meetDATETIME = resultDICT["time"][0][0]
-                                if self.mscDICT[message.author.id]["latestIntent"] == "set":
+                                if self.mscDICT[message.author.id]["latestIntent"] == "meet_adv":
                                     if checkDuplicateMeet(str(meetDATETIME)):
                                         replySTR = "該時段已經有會議了喔！"
                                     elif meetDATETIME < datetime.datetime.now():
                                         replySTR = "你預約的時間已經過了喔！"
                                     else:
-                                        newMeet = meet(meetDATETIME,repeatBOOL)
+                                        newMeet = notification(meetDATETIME)
                                         newMeet.start()
                                         print(meet_instances)
                                         replySTR = f"好的，我會提醒你{resultDICT['time'][0][1]}要開會!"
@@ -291,3 +318,4 @@ if __name__ == "__main__":
         accountDICT = json.loads(f.read())
     client = BotClient(intents=discord.Intents.default())
     client.run(accountDICT["discord_token"])
+    atexit.register(save_notifications)
