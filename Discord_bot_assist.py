@@ -54,18 +54,11 @@ class notification():
                 self.setRepeat()
             self.task.cancel()
             self.task = None
-        if self in meet_instances.values():
-            # Remove the instance from meet_instances after sending the notification
-            del meet_instances[str(self.datetime)]
-        else:
-            # Remove the instance from alarm_instances after sending the notification
-            del alarm_instances[str(self.datetime)]
-
 
 
     def setRepeat(self):
             newTime = self.datetime + datetime.timedelta(weeks=1)  # 預設是週會，一週重複一次
-            newmeet = notification(newTime, repeat=True)
+            newmeet = notification(newTime, repeat=True, participant=self.participant, eventTypeSTR=self.eventType, contentSTR=self.content)
             newmeet.start()
     
     def resetDatetime(self,newTime):
@@ -104,6 +97,12 @@ class notification():
                         await channel.send(f"哈囉！我來提醒{self.participant}要開會囉")  # Send the message
                     elif self.eventType == "alarm":
                         await channel.send(f"哈囉！我來提醒{self.participant} 「{self.content}」！")
+                    if self in meet_instances.values():
+                        # Remove the instance from meet_instances after sending the notification
+                        del meet_instances[str(self.datetime)]
+                    else:
+                        # Remove the instance from alarm_instances after sending the notification
+                        del alarm_instances[str(self.datetime)]
                     self.cancel()
                     print(f'Notification for {str(self.datetime)} sent')
                     
