@@ -99,16 +99,16 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
             resultDICT["intent"].append(INTENT_NAME)
             resultDICT["repeat"] = False
 
-    if utterance == "提醒我晚上十點開會":
+    if utterance == "晚上十點開週會":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            resultDICT["response"] = "好的，我會在{0}提醒你開會！"
+            resultDICT["response"] = "好的，我會在每個{0}提醒你開會！"
             resultDICT["intent"].append(INTENT_NAME)
-            resultDICT["repeat"] = False
+            resultDICT["repeat"] = True
 
 
     return resultDICT
