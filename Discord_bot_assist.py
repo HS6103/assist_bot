@@ -371,7 +371,7 @@ class BotClient(discord.Client):
                                         newMeet = notification(alarmDATETIME,eventTypeSTR="meet")
                                         newMeet.start()
                                         print(meet_instances)
-                                        replySTR = f"好的，我會提醒你{resultDICT['time'][0][1]}要開會!"
+                                        replySTR = f"好的，我會提醒你{resultDICT['time'][0][1]}要開會！"
                                         self.mscDICT[message.author.id]["latestIntent"] = intentSTR
 
                                 elif latestIntent == "cancel":
