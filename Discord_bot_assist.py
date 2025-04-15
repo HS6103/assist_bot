@@ -21,6 +21,9 @@ logging.basicConfig(level=logging.DEBUG)
 scheduled_task = None  # Global variable to store the scheduled task
 meet_instances = {} # Store meet instances
 alarm_instances = {} # Store alarm instances
+
+#class notificationHandler():
+
 class notification():
     def __init__(self,time,repeat=False,participant="@everyone",eventTypeSTR="alarm",contentSTR=""):
         self.datetime =  time
@@ -49,17 +52,14 @@ class notification():
                 alarm_instances[str(self.datetime)] = self
 
     def cancel(self):
-        if self.task:
-            if self.repeat == True:
-                self.setRepeat()
-            self.task.cancel()
-            self.task = None
+        self.task.cancel()
+        self.task = None
 
 
     def setRepeat(self):
-            newTime = self.datetime + datetime.timedelta(weeks=1)  # 預設是週會，一週重複一次
-            newmeet = notification(newTime, repeat=True, participant=self.participant, eventTypeSTR=self.eventType, contentSTR=self.content)
-            newmeet.start()
+        newTime = self.datetime + datetime.timedelta(weeks=1)  # 預設是週會，一週重複一次
+        newmeet = notification(newTime, repeat=True, participant=self.participant, eventTypeSTR=self.eventType, contentSTR=self.content)
+        newmeet.start()
     
     def resetDatetime(self,newTime):
         self.datetime = newTime
@@ -67,7 +67,7 @@ class notification():
     # Method to convert the Notification object to a dictionary, which can be saved to JSON
     def to_dict(self):
         # Convert datetime to string for JSON serialization
-        return {
+        data = {
             "datetime": self.datetime.strftime("%Y-%m-%d %H:%M:%S"),  # Format as a string
             "todoLIST": self.todoLIST,
             "channelID": self.channelID,
@@ -76,6 +76,24 @@ class notification():
             "participant": self.participant,
             "eventType": self.eventType
         }
+         
+        return data
+    
+    @classmethod
+    def from_dict(cls, data):
+        datetime_obj = datetime.datetime.strptime(data["datetime"], "%Y-%m-%d %H:%M:%S") # Convert string back to datetime
+
+        if data["repeat"] == True:
+            while datetime.datetime.now() > datetime_obj: # If the datetime is in the past and repeat is True, set it until in the future
+                newTime = datetime_obj + datetime.timedelta(weeks=1)
+                datetime_obj = datetime.datetime.strptime(newTime.strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+        elif datetime_obj < datetime.datetime.now():
+            return None # If the datetime is in the past and repeat is False, return None
+        
+        # Create a new instance of Notification using the dictionary data
+        return cls(time=datetime_obj, repeat=data["repeat"], participant=data["participant"],
+                    eventTypeSTR=data["eventType"])
+
 
     async def notify(self):
         now = datetime.datetime.now()
@@ -119,6 +137,26 @@ def save_notifications():
     with open("backup.json", "w") as json_file:
         json.dump(notifications_data, json_file, indent=4)
     print("Notifications saved to backup.json")
+
+# Load notifications from the backup file
+def load_notifications():
+    try:
+        if os.path.exists("backup.json"):
+                with open("backup.json", "r") as json_file:
+                    notifications_data = json.load(json_file)
+                    # Convert each dictionary back to a Notification or RepeatedNotification object
+                    for key, value in notifications_data.items():
+                        if value["eventType"] == "meet":
+
+                            meet_instances[key] = notification.from_dict(value)
+                            #print(meet_instances)
+                        else:
+                            alarm_instances[key] = notification.from_dict(value)
+                            #print(alarm_instances)
+
+                    print("Notifications loaded from backup.json")
+    except Exception as e:
+        print(f"Error loading notifications: {e}")
 
 def checkDuplicateMeet(meetTimeSTR):
     if meetTimeSTR in meet_instances:
@@ -194,7 +232,14 @@ class BotClient(discord.Client):
         self.mscDICT = { #userid:templateDICT
         }
         # ####################################################################################
+        load_notifications()   
+        for notification in meet_instances.values():
+            notification.start()
+        for notification in alarm_instances.values():
+            notification.start()
         print('Logged on as {} with id {}'.format(self.user, self.user.id))
+        print("--------------------")
+
 
     async def on_message(self, message):
         # Don't respond to bot itself. Or it would create a non-stop loop.
@@ -321,7 +366,7 @@ class BotClient(discord.Client):
                                     elif alarmDATETIME < datetime.datetime.now():
                                         replySTR = "你預約的時間已經過了喔！"
                                     else:
-                                        newMeet = notification(alarmDATETIME)
+                                        newMeet = notification(alarmDATETIME,eventTypeSTR="meet")
                                         newMeet.start()
                                         print(meet_instances)
                                         replySTR = f"好的，我會提醒你{resultDICT['time'][0][1]}要開會!"
@@ -356,14 +401,23 @@ class BotClient(discord.Client):
                                 if "time" in resultDICT["intent"]:
                                     alarmDATETIME = resultDICT["time"][0][0]
                                     if checkDuplicateMeet(str(alarmDATETIME)):
+                                        if meet_instances[str(alarmDATETIME)].repeat == True:
+                                            meet_instances[str(alarmDATETIME)].setRepeat()
+                                            tmpSTR = replySTR.format(resultDICT["time"][0][1]) + "我會在下下次的同一時間提醒你！"
+                                        else:
+                                            tmpSTR = replySTR.format(resultDICT["time"][0][1])
+                                            
                                         meet_instances[str(alarmDATETIME)].cancel()
                                         del meet_instances[str(alarmDATETIME)]
-                                        replySTR = replySTR.format(resultDICT["time"][0][1])
                                         print(meet_instances)
+                                        replySTR = tmpSTR
+                                        self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+
                                     else:
-                                        replySTR = "該時段沒有會議！"
+                                        replySTR = "該時段沒有會議或提醒！"
                                 else:
-                                    replySTR = "你要取消什麼時候的會議呢？"
+                                    replySTR = "你要取消什麼時候的會會議或提醒呢？"
+                                    self.mscDICT[message.author.id]["latestIntent"] = intentSTR
 
                         # Nonsense Handling :)
                         if self.mscDICT[message.author.id]["false_count"] == 4:
@@ -385,6 +439,10 @@ class BotClient(discord.Client):
 if __name__ == "__main__":
     with open("account.info", encoding="utf-8") as f: #讀取account.info
         accountDICT = json.loads(f.read())
+        # Call this to load the notifications when the program starts
+
+    # Create an instance of the BotClient and run it 
     client = BotClient(intents=discord.Intents.default())
     client.run(accountDICT["discord_token"])
+
     atexit.register(save_notifications)
