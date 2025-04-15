@@ -101,7 +101,7 @@ class notification():
         channel = client.get_channel(self.channelID)  # Get the target channel
         
         wait_time = (self.datetime - now).total_seconds()
-        if wait_time <= 0:
+        if wait_time < 0:
             self.resetDatetime(self.datetime + datetime.timedelta(weeks=1))
             print(self.getDatetime())
             wait_time = (self.datetime - now).total_seconds()
@@ -112,7 +112,7 @@ class notification():
                     print(f"Notification for {str(self.datetime)} ready")
                     await asyncio.sleep(wait_time)  # Wait until the scheduled time
                     if self.eventType == "meet":
-                        await channel.send(f"哈囉！我來提醒{self.participant}要開會囉")  # Send the message
+                        await channel.send(f"哈囉！我來提醒 {self.participant} 要開會囉")  # Send the message
                     elif self.eventType == "alarm":
                         await channel.send(f"哈囉！我來提醒{self.participant} 「{self.content}」！")
                     if self in meet_instances.values():
@@ -121,6 +121,8 @@ class notification():
                     else:
                         # Remove the instance from alarm_instances after sending the notification
                         del alarm_instances[str(self.datetime)]
+                    if self.repeat == True:
+                        self.setRepeat()
                     self.cancel()
                     print(f'Notification for {str(self.datetime)} sent')
                     
@@ -249,7 +251,7 @@ class BotClient(discord.Client):
 
         logging.debug("收到來自 {} 的訊息".format(message.author))
         logging.debug("訊息內容是 {}。".format(message.content))
-        if self.user.mentioned_in(message):
+        if self.user.mentioned_in(message) and message.content != "": # 排除 @usergroup 的情況
             replySTR = "我是預設的回應字串…你會看到我這串字，肯定是出了什麼錯！"
             logging.debug("本 bot 被叫到了！")
             msgSTR = message.content.replace("<@{}> ".format(self.user.id), "").strip()
