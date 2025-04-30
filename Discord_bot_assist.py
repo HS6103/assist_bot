@@ -46,10 +46,6 @@ class notification():
     def start(self):
         if self.task is None:
             self.task = asyncio.create_task(self.notify())
-            if self.eventType == "meet":
-                meet_instances[str(self.datetime)] = self
-            else:
-                alarm_instances[str(self.datetime)] = self
 
     def cancel(self):
         self.task.cancel()
@@ -67,7 +63,7 @@ class notification():
     def to_dict(self):
         # Convert datetime to string for JSON serialization
         data = {
-            "datetime": self.datetime.strftime("%Y-%m-%d %H:%M:%S"),  # Convert datetime to string
+            "datetime": self.datetime,
             "todoLIST": self.todoLIST,
             "channelID": self.channelID,
             "task": None,
@@ -85,14 +81,15 @@ class notification():
 
     async def notify(self):
         now = datetime.datetime.now()
+        target_time = datetime.datetime.strptime(self.datetime, "%Y-%m-%d %H:%M:%S")
         await client.wait_until_ready()  # Ensure bot is logged in
         channel = client.get_channel(self.channelID)  # Get the target channel
         
-        wait_time = (self.datetime - now).total_seconds()
+        wait_time = (target_time - now).total_seconds()
         if wait_time < 0:
-            self.resetDatetime(self.datetime + datetime.timedelta(weeks=1))
+            self.resetDatetime(target_time + datetime.timedelta(weeks=1))
             print(self.getDatetime())
-            wait_time = (self.datetime - now).total_seconds()
+            wait_time = (target_time - now).total_seconds()
 
         while not client.is_closed():
             if self.datetime:
@@ -136,20 +133,27 @@ def load_notifications():
                     notification_tmp = json.load(json_file)
                     # Convert each dictionary back to a Notification or RepeatedNotification object
                     for key, value in notification_tmp.items():
+                        newTime = None
                         datetime_obj = datetime.datetime.strptime(value["datetime"], "%Y-%m-%d %H:%M:%S") # Convert string back to datetime
-                        if value["repeat"] == True:
-                            while datetime.datetime.now() > datetime_obj: # If the datetime is in the past and repeat is True, set it until in the future
-                                newTime = datetime_obj + datetime.timedelta(weeks=1)
-                                datetime_obj = datetime.datetime.strptime(newTime.strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
-                        else:
-                            if datetime_obj < datetime.datetime.now():
+                        if datetime_obj < datetime.datetime.now():
+                            if value["repeat"] == True:
+                                newTime = datetime_obj
+                                while datetime.datetime.now() > newTime: # If the datetime is in the past and repeat is True, set it until in the future
+                                    newTime = newTime + datetime.timedelta(weeks=1)
+                            else:
                                 continue # Skip if the datetime is in the past and repeat is False
 
                         if value["eventType"] == "meet":
-                            meet_instances[str(datetime_obj)] = notification.from_dict(value)
-                            if datetime_obj != key: # If the datetime is not the same as the key, reset it
-                                meet_instances[str(datetime_obj)].resetDatetime(datetime_obj) # Reset the datetime to the loaded value
-                            meet_instances[str(datetime_obj)].start() # Start the notification task
+                            if newTime:
+                                if datetime.datetime.strftime(newTime, "%Y-%m-%d %H:%M:%S") not in notification_tmp.keys(): # If the datetime is not the same as the key, reset it
+                                    meet_instances[newTime] = notification.from_dict(value)
+                                    meet_instances[newTime].resetDatetime(newTime) # Reset the datetime to the loaded value
+                                    meet_instances[newTime].start() # Start the notification task
+                                else:
+                                    continue # Skip if the datetime is in the past and repeat is False
+                            else:
+                                meet_instances[str(datetime_obj)] = notification.from_dict(value)
+                                meet_instances[str(datetime_obj)].start() # Start the notification task
                             #print(meet_instances)
                         else:
                             alarm_instances[str(datetime_obj)] = notification.from_dict(value)
