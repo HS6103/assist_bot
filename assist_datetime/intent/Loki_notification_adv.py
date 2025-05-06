@@ -94,13 +94,13 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
         else:
             if args[0] == "我":
                 resultDICT["participant"] = "msgauthor"
-            elif args[0] != "None":
-                resultDICT["participant"] = f"<@{args[0]}>"
-            elif args[1] != "None":
-                resultDICT["participant"] = f"<@{args[1]}>"
+            elif args[0] != None:
+                resultDICT["participant"] = f"<@{args[0].strip(' ')}>"
+            elif args[1] != None:
+                resultDICT["participant"] = f"<@{args[1].strip(' ')}>"          
             else:
-                resultDICT["participant"] = args[1]
-            resultDICT["content"] = re.sub(r"(<.+?>)", "", args[2])
+                resultDICT["participant"] = f"<@{args[2].strip(' ')}>"
+            resultDICT["content"] = re.sub(r"(<.+?>)", "", args[-1])
             resultDICT["intent"].append(INTENT_NAME)
     return resultDICT
 
