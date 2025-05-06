@@ -99,7 +99,7 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
             elif args[1] != None:
                 resultDICT["participant"] = f"<@{args[1].strip(' ')}>"          
             else:
-                resultDICT["participant"] = f"<@{args[2].strip(' ')}>"
+                resultDICT["participant"] = f"@{args[2].strip(' ')}"  # everyone or here
             resultDICT["content"] = re.sub(r"(<.+?>)", "", args[-1])
             resultDICT["intent"].append(INTENT_NAME)
     return resultDICT
