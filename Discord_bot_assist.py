@@ -25,8 +25,8 @@ alarm_instances = {} # Store alarm instances
 #class notificationHandler():
 
 class notification():
-    def __init__(self,time,repeat=False,participant="@everyone",eventTypeSTR="alarm",contentSTR=""):
-        self.datetime =  time
+    def __init__(self,timeSTR,repeat=False,participant="@everyone",eventTypeSTR="alarm",contentSTR=""):
+        self.datetime =  timeSTR
         self.todoLIST = []
         self.channelID = int(os.getenv("channel_id"))
         self.task = None
@@ -56,8 +56,8 @@ class notification():
         self.task = None
 
     def setRepeat(self):
-        newTime = self.datetime + datetime.timedelta(weeks=1)  # 預設是週會，一週重複一次
-        newmeet = notification(newTime, repeat=True, participant=self.participant, eventTypeSTR=self.eventType, contentSTR=self.content)
+        newTime = datetime.datetime.strptime(self.datetime, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(weeks=1)  # 預設是週會，一週重複一次
+        newmeet = notification(str(newTime), repeat=True, participant=self.participant, eventTypeSTR=self.eventType, contentSTR=self.content)
         newmeet.start()
     
     def resetDatetime(self,newTime):
@@ -67,7 +67,7 @@ class notification():
     def to_dict(self):
         # Convert datetime to string for JSON serialization
         data = {
-            "datetime": self.datetime,
+            "datetime": str(self.datetime),
             "todoLIST": self.todoLIST,
             "content": self.content,
             "channelID": self.channelID,
@@ -82,7 +82,7 @@ class notification():
     @classmethod
     def from_dict(cls, data):
         # Create a new instance of Notification using the dictionary data
-        return cls(time=data["datetime"], repeat=data["repeat"], participant=data["participant"],eventTypeSTR=data["eventType"], contentSTR=data["content"])
+        return cls(timeSTR=data["datetime"], repeat=data["repeat"], participant=data["participant"],eventTypeSTR=data["eventType"], contentSTR=data["content"])
 
     async def notify(self):
         now = datetime.datetime.now()
@@ -128,8 +128,8 @@ class notification():
 def save_notifications():
     notifications_data = {}
     # Convert all Notification objects to dictionaries
-    meet_data = {key: value.to_dict() for key, value in meet_instances.items()}
-    alarm_data = {key: value.to_dict() for key, value in alarm_instances.items()}
+    meet_data = {str(key): value.to_dict() for key, value in meet_instances.items()}
+    alarm_data = {str(key): value.to_dict() for key, value in alarm_instances.items()}
 
     notifications_data.update(meet_data)  # Merge both dictionaries
     notifications_data.update(alarm_data)  # Merge both dictionaries
