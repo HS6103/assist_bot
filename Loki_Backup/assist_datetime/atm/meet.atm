@@ -1,0 +1,42 @@
+{
+    "language": "zh-tw",
+    "type": "basic",
+    "pattern": {
+        "(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[開會][^<不]*</VERB_P>": {
+            "id": "135c48f2-4327-4e0f-b00c-de0e0b65085a",
+            "noun": {
+                "count": 0
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開",
+                    "會"
+                ],
+                "count": 1
+            },
+            "argument": [],
+            "utterance": "開會"
+        },
+        "(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[開][^<不]*</VERB_P><ENTITY_UserDefined>[^<]+</ENTITY_UserDefined>": {
+            "id": "097e031d-28b1-44dc-b7bb-72deaf4e6bd0",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ]
+            ],
+            "utterance": "開[週會]"
+        }
+    }
+}

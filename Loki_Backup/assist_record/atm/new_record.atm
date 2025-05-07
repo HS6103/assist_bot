@@ -1,0 +1,136 @@
+{
+    "language": "zh-tw",
+    "type": "basic",
+    "pattern": {
+        "(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[開][^<不]*</VERB_P><ENTITY_UserDefined>[^<]+</ENTITY_UserDefined>": {
+            "id": "29ec8918-bf20-405b-919b-0932a017f216",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ]
+            ],
+            "utterance": "開[會議紀錄]"
+        },
+        "(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[建立][^<不]*</VERB_P>(<MODIFIER_P>[^<]+</MODIFIER_P>)?<ENTITY_UserDefined>[^<]+</ENTITY_UserDefined>": {
+            "id": "9e6f5027-5c97-4bf0-b144-744e1a98a761",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "建",
+                    "立"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "MODIFIER_P",
+                    0
+                ],
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ]
+            ],
+            "utterance": "建立[新]的[會議紀錄]"
+        },
+        "(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[開][^<不]*</VERB_P><ENTITY_classifier>[^<]+</ENTITY_classifier>(<MODIFIER_P>[^<]+</MODIFIER_P>)?<ENTITY_UserDefined>[^<]+</ENTITY_UserDefined>": {
+            "id": "76d1f912-baf5-4e7c-9804-ed62ae8273dd",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "ENTITY_classifier",
+                    0
+                ],
+                [
+                    "MODIFIER_P",
+                    0
+                ],
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ]
+            ],
+            "utterance": "開[一份][新]的[會議紀錄]"
+        },
+        "(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[建立][^<不]*</VERB_P><ENTITY_classifier>[^<]+</ENTITY_classifier>(<MODIFIER_P>[^<]+</MODIFIER_P>)?<ENTITY_UserDefined>[^<]+</ENTITY_UserDefined>": {
+            "id": "7048bb3b-2dd2-4ed2-9ef4-1b80bec78902",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "建",
+                    "立"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "ENTITY_classifier",
+                    0
+                ],
+                [
+                    "MODIFIER_P",
+                    0
+                ],
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ]
+            ],
+            "utterance": "建立[一份][新]的[會議紀錄]"
+        },
+        "(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[開][^<不]*</VERB_P><ACTION_eventQuantifier>[^<]+</ACTION_eventQuantifier>(<MODIFIER_P>[^<]+</MODIFIER_P>)?<ENTITY_UserDefined>[^<]+</ENTITY_UserDefined>": {
+            "id": "abcb6eb9-72a0-413d-9d8b-6e937955c16a",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "ACTION_eventQuantifier",
+                    0
+                ],
+                [
+                    "MODIFIER_P",
+                    0
+                ],
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ]
+            ],
+            "utterance": "開[個][新]的[會議紀錄]"
+        }
+    }
+}

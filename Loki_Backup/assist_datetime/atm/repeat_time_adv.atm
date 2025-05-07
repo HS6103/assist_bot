@@ -1,0 +1,26 @@
+{
+    "language": "zh-tw",
+    "type": "advance",
+    "pattern": {
+        "<QUANTIFIER>每</QUANTIFIER><TIME_week>[^<]+</TIME_week>": {
+            "id": "54cf20db-b4b9-48d5-baf3-f518b568e3cd",
+            "utterance": "每個禮拜"
+        },
+        "(?:<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>(每[^<]+)</TIME_(?:holiday|justtime|day|week|month|season|year|decade)){1,10}?": {
+            "id": "6785ede3-564d-4835-ac43-375e4cc8b326",
+            "utterance": "每天早上十點"
+        },
+        "(?:<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>(每[^<]+)</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>){1,10}": {
+            "id": "549b03cc-e78f-419f-94cc-a597594f9416",
+            "utterance": "每周五"
+        },
+        "<ENTITY_DetPhrase>每個</ENTITY_DetPhrase>(?:<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>[^<]+</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>){1,10}": {
+            "id": "bd4a3dee-8f81-46b1-b866-c8ddee8341d1",
+            "utterance": "每個星期五"
+        },
+        "<ENTITY_DetPhrase>每個</ENTITY_DetPhrase><ENTITY_nouny>月</ENTITY_nouny>(?:<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>[^<]+</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>){1,10}": {
+            "id": "182e53e7-d9ab-42c0-a3c9-b1ff37982022",
+            "utterance": "每個月5號"
+        }
+    }
+}

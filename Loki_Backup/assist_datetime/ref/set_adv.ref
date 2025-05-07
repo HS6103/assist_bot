@@ -1,0 +1,32 @@
+{
+    "language": "zh-tw",
+    "type": "advance",
+    "version": {
+        "atk": "v276",
+        "intent": "1.0"
+    },
+    "user_defined": {
+        "as_dot": [
+            "."
+        ],
+        "as_meet": [
+            "周會",
+            "週會"
+        ]
+    },
+    "utterance": {
+        "十點提醒 <@1077237412259971142> 要開會": {
+            "id": "d2c7380b-5e7c-4c4d-b54b-ff3f7fecbbfa",
+            "pos": "<TIME_justtime>十點</TIME_justtime><ACTION_verb>提醒</ACTION_verb><ENTITY_num>1077237412259971142</ENTITY_num><ACTION_verb>要</ACTION_verb><ACTION_verb>開會</ACTION_verb>",
+            "lexy": [
+                "(?<!</FUNC_negation>)<(ACTION_verb|VerbP)>(提醒|提示|警告|警示|關照|叮囑|告訴|奉勸|告誡|叮嚀|籲請)</(ACTION_verb|VerbP)>",
+                "(?<!</FUNC_negation>)<(ACTION_verb|VerbP)>(要|想要|需要|想拿|想買|渴望|渴求|餓了|得照|需|更要)</(ACTION_verb|VerbP)>",
+                "(?<!</FUNC_negation>)<(ACTION_verb|VerbP)>(開會|赴會|召開|會勘|開議|會面|會商|研商|召開了|開庭|協商)</(ACTION_verb|VerbP)>"
+            ],
+            "pattern": "(?:</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>|<(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>.</(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>|</ENTITY_num>|半</MODIFIER>)(?:<(?:ACTION_verb|VerbP)>半?要</(?:ACTION_verb|VerbP)>)?<ACTION_verb>(?:提醒|通知)</ACTION_verb>(?:(?:<ENTITY_pronoun>([^<]+)</ENTITY_pronoun>)|(?:(?:<ENTITY_num>([0-9]{17,19}))</ENTITY_num>))(?:<ACTION_verb>(?:要|記得)</ACTION_verb>)?((?:(?=(?:.*<ACTION_verb>開會))).+?$)"
+        }
+    },
+    "alias": {},
+    "prompt": {},
+    "document": []
+}

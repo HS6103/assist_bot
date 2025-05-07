@@ -1,0 +1,160 @@
+{
+    "language": "zh-tw",
+    "type": "basic",
+    "pattern": {
+        "<CLAUSE_WhenQ>[^<]+</CLAUSE_WhenQ><ENTITY_UserDefined>[^<]+</ENTITY_UserDefined><VERB_P>[^<不]*[開會][^<不]*</VERB_P>": {
+            "id": "963d95fe-c8ee-4dab-8171-996ff1c8ed67",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開",
+                    "會"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ]
+            ],
+            "utterance": "什麼[時候]開會"
+        },
+        "<CLAUSE_WhenQ>[^<]+</CLAUSE_WhenQ><ENTITY_UserDefined>[^<]+</ENTITY_UserDefined><VERB_P>[^<不]*[要][^<不]*</VERB_P><VERB_P>[^<不]*[開會][^<不]*</VERB_P>": {
+            "id": "80c88a44-4185-47f9-8b91-c0347554c95e",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "要",
+                    "開",
+                    "會"
+                ],
+                "count": 2
+            },
+            "argument": [
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ]
+            ],
+            "utterance": "什麼[時候]要開會"
+        },
+        "<CLAUSE_HowQ>[^<]+</CLAUSE_HowQ>(<QUANTIFIER>[^<]+</QUANTIFIER>)?(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[開會][^<不]*</VERB_P>": {
+            "id": "15ecacc8-b9a3-4ade-9624-8d0d2e3dac21",
+            "noun": {
+                "count": 0
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開",
+                    "會"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "QUANTIFIER",
+                    0
+                ]
+            ],
+            "utterance": "幾[點]開會"
+        },
+        "(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[要][^<不]*</VERB_P><VERB_P>[^<不]*[開會][^<不]*</VERB_P><CLAUSE_YesNoQ>[^<]+</CLAUSE_YesNoQ>": {
+            "id": "e04f3eef-5f6c-4e4b-9441-b881e5a0386c",
+            "noun": {
+                "count": 0
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "要",
+                    "開",
+                    "會"
+                ],
+                "count": 2
+            },
+            "argument": [],
+            "utterance": "要開會嗎"
+        },
+        "<CLAUSE_HowQ>[^<]+</CLAUSE_HowQ>(<QUANTIFIER>[^<]+</QUANTIFIER>)?(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[開始][^<不]*</VERB_P><VERB_P>[^<不]*[開會][^<不]*</VERB_P>": {
+            "id": "1dba9c09-56ab-46b4-b284-bd0b5d87695c",
+            "noun": {
+                "count": 0
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開",
+                    "始",
+                    "開",
+                    "會"
+                ],
+                "count": 2
+            },
+            "argument": [
+                [
+                    "QUANTIFIER",
+                    0
+                ]
+            ],
+            "utterance": "幾[點]開始開會？"
+        },
+        "<ENTITY_UserDefined>[^<]+</ENTITY_UserDefined><CLAUSE_HowQ>[^<]+</CLAUSE_HowQ>(<QUANTIFIER>[^<]+</QUANTIFIER>)?(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[開始][^<不]*</VERB_P>": {
+            "id": "14d31567-0ae7-4936-adba-efec98f38e33",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開",
+                    "始"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ],
+                [
+                    "QUANTIFIER",
+                    0
+                ]
+            ],
+            "utterance": "[會議]幾[點]開始？"
+        },
+        "(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[開會][^<不]*</VERB_P><ENTITY_UserDefined>[^<]+</ENTITY_UserDefined><AUX>[^<]+</AUX><CLAUSE_HowQ>[^<]+</CLAUSE_HowQ>(<QUANTIFIER>[^<]+</QUANTIFIER>)?": {
+            "id": "6a7e2ec1-2f3c-48de-a5a3-adf9bb2ebf1e",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開",
+                    "會"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ],
+                [
+                    "QUANTIFIER",
+                    0
+                ]
+            ],
+            "utterance": "開會的[時間]是幾[點]？"
+        }
+    }
+}

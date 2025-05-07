@@ -1,0 +1,797 @@
+{
+    "language": "zh-tw",
+    "type": "basic",
+    "version": {
+        "atk": "v276",
+        "intent": "1.0"
+    },
+    "user_defined": {
+        "as_dot": [
+            "."
+        ],
+        "as_meet": [
+            "周會",
+            "週會"
+        ]
+    },
+    "utterance": {
+        "幾點開會": {
+            "id": "15ecacc8-b9a3-4ade-9624-8d0d2e3dac21",
+            "argument": [
+                {
+                    "pos": "CLAUSE_HowQ",
+                    "text": "幾",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "QUANTIFIER",
+                    "text": "點",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "赴會",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "協商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召集",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會面",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "研商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開議",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會勘",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開庭",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開會",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        },
+        "要開會嗎": {
+            "id": "e04f3eef-5f6c-4e4b-9441-b881e5a0386c",
+            "argument": [
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "想要",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "需要",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "想拿",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "想買",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "渴望",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "渴求",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "餓了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "得照",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "需",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "更要",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "想",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "要去",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "真要",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "餓",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "要",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "赴會",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會勘",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開議",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會面",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "研商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開庭",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "協商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召集",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開會",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "CLAUSE_YesNoQ",
+                    "text": "嗎",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        },
+        "什麼時候開會": {
+            "id": "963d95fe-c8ee-4dab-8171-996ff1c8ed67",
+            "argument": [
+                {
+                    "pos": "CLAUSE_WhenQ",
+                    "text": "什麼",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ENTITY_oov",
+                    "text": "時候",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "赴會",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "協商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召集",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會面",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "研商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開議",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會勘",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開庭",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開會",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        },
+        "什麼時候要開會": {
+            "id": "80c88a44-4185-47f9-8b91-c0347554c95e",
+            "argument": [
+                {
+                    "pos": "CLAUSE_WhenQ",
+                    "text": "什麼",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ENTITY_oov",
+                    "text": "時候",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "想要",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "需要",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "想拿",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "想買",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "渴望",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "渴求",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "餓了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "得照",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "需",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "更要",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "想",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "要去",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "真要",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "餓",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "要",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "赴會",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會勘",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開議",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會面",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "研商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開庭",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "協商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召集",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開會",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        },
+        "幾點開始開會？": {
+            "id": "1dba9c09-56ab-46b4-b284-bd0b5d87695c",
+            "argument": [
+                {
+                    "pos": "CLAUSE_HowQ",
+                    "text": "幾",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "QUANTIFIER",
+                    "text": "點",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "啟用",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "開創",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "結束",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "展開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "停止",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "停止了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開始了",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開始",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "赴會",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會勘",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開議",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會面",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "研商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開庭",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "協商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召集",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開會",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "PUNCTUATION",
+                    "text": "？",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        },
+        "會議幾點開始？": {
+            "id": "14d31567-0ae7-4936-adba-efec98f38e33",
+            "argument": [
+                {
+                    "pos": "ENTITY_oov",
+                    "text": "會議",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "CLAUSE_HowQ",
+                    "text": "幾",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "QUANTIFIER",
+                    "text": "點",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "啟用",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "開創",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "結束",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "停止",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "停止了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開始了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "展開",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開始",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "PUNCTUATION",
+                    "text": "？",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        },
+        "開會的時間是幾點？": {
+            "id": "6a7e2ec1-2f3c-48de-a5a3-adf9bb2ebf1e",
+            "argument": [
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "赴會",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "協商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召集",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會面",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "研商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開議",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會勘",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開庭",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開會",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "FUNC_inner",
+                    "text": "的",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ENTITY_noun",
+                    "text": "時間",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "AUX",
+                    "text": "是",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "CLAUSE_HowQ",
+                    "text": "幾",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "QUANTIFIER",
+                    "text": "點",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "PUNCTUATION",
+                    "text": "？",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        }
+    },
+    "alias": {},
+    "prompt": {},
+    "document": []
+}

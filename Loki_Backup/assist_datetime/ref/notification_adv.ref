@@ -1,0 +1,32 @@
+{
+    "language": "zh-tw",
+    "type": "advance",
+    "version": {
+        "atk": "v276",
+        "intent": "1.0"
+    },
+    "user_defined": {
+        "as_dot": [
+            "."
+        ],
+        "as_meet": [
+            "周會",
+            "週會"
+        ]
+    },
+    "utterance": {
+        "十點提醒 <@1077237412259971142> 要吃早餐": {
+            "id": "013c6ce8-3783-47a9-9e4d-74ee1baaa651",
+            "pos": "<TIME_justtime>十點</TIME_justtime><ACTION_verb>提醒</ACTION_verb><ENTITY_num>1077237412259971142</ENTITY_num><ACTION_verb>要</ACTION_verb><ACTION_verb>吃</ACTION_verb><ENTITY_noun>早餐</ENTITY_noun>",
+            "lexy": [
+                "(?<!</FUNC_negation>)<(ACTION_verb|VerbP)>(提醒|提示|警告|警示|關照|叮囑|告訴|奉勸|告誡|叮嚀|籲請)</(ACTION_verb|VerbP)>",
+                "(?<!</FUNC_negation>)<(ACTION_verb|VerbP)>(要|想要|需要|想拿|想買|渴望|渴求|餓了|得照|需|更要)</(ACTION_verb|VerbP)>",
+                "(?<!</FUNC_negation>)<(ACTION_verb|VerbP)>(吃|吃掉|吸收|攝入|耗損|花掉|煮|啃|吃著|喝|常吃)</(ACTION_verb|VerbP)>"
+            ],
+            "pattern": "(?:</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>|<(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>.</(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>|</ENTITY_num>|半</MODIFIER>)(?:<(?:ACTION_verb|VerbP)>半?要</(?:ACTION_verb|VerbP)>)?<ACTION_verb>(?:提醒|通知)</ACTION_verb>(?:(?:<ENTITY_pronoun>([^<]+)</ENTITY_pronoun>)|(?:(?:<ENTITY_num>([0-9]{17,19}))</ENTITY_num>|(?:<ENTITY_oov>(everyone |here )</ENTITY_oov>)))(?:<ACTION_verb>(?:要|記得)</ACTION_verb>)?(.+?$)"
+        }
+    },
+    "alias": {},
+    "prompt": {},
+    "document": []
+}

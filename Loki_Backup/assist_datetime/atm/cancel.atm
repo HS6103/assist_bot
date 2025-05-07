@@ -1,0 +1,59 @@
+{
+    "language": "zh-tw",
+    "type": "basic",
+    "pattern": {
+        "<FUNC_negation>[^<]+</FUNC_negation><VERB_P>[^<不]*[開會][^<不]*</VERB_P>": {
+            "id": "528cacfc-7bd1-49d1-a8fa-07c9acefd96c",
+            "noun": {
+                "count": 0
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "開",
+                    "會"
+                ],
+                "count": 1
+            },
+            "argument": [],
+            "utterance": "不開會"
+        },
+        "<ENTITY_UserDefined>[^<]+</ENTITY_UserDefined><VERB_P>[^<不]*[暫停][^<不]*</VERB_P>": {
+            "id": "43f852c6-acb3-428d-bf6a-31e35b282539",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "暫",
+                    "停"
+                ],
+                "count": 1
+            },
+            "argument": [
+                [
+                    "ENTITY_UserDefined",
+                    0
+                ]
+            ],
+            "utterance": "[會議]暫停"
+        },
+        "(?<!</FUNC_negation>)(?<!</FUNC_negation><VERB_P>[^<]</VERB_P>)<VERB_P>[^<不]*[取消][^<不]*</VERB_P>": {
+            "id": "2b16174c-6847-44da-9b75-bad3f2687f3a",
+            "noun": {
+                "count": 0
+            },
+            "verb": {
+                "lexy": false,
+                "text": [
+                    "取",
+                    "消"
+                ],
+                "count": 1
+            },
+            "argument": [],
+            "utterance": "取消"
+        }
+    }
+}

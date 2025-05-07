@@ -1,0 +1,10 @@
+{
+    "language": "zh-tw",
+    "type": "advance",
+    "pattern": {
+        "(?:</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>|<(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>.</(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>|</ENTITY_num>|半</MODIFIER>)(?:<(?:ACTION_verb|VerbP)>半?要</(?:ACTION_verb|VerbP)>)?<ACTION_verb>(?:提醒|通知)</ACTION_verb>(?:(?:<ENTITY_pronoun>([^<]+)</ENTITY_pronoun>)|(?:(?:<ENTITY_num>([0-9]{17,19}))</ENTITY_num>|(?:<ENTITY_oov>(everyone |here )</ENTITY_oov>)))(?:<ACTION_verb>(?:要|記得)</ACTION_verb>)?(.+?$)": {
+            "id": "013c6ce8-3783-47a9-9e4d-74ee1baaa651",
+            "utterance": "十點提醒 <@1077237412259971142> 要吃早餐"
+        }
+    }
+}

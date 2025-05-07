@@ -1,0 +1,14 @@
+{
+    "language": "zh-tw",
+    "type": "advance",
+    "pattern": {
+        "(?:(<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>[^<]+</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>){0,10}(?:<ENTITY_num>[^<]+</ENTITY_num><(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>.</(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>(?:<ENTITY_num>[^<]+</ENTITY_num>)?)?|<ENTITY_num>[^<]+</ENTITY_num><ENTITY_num>[^<]+</ENTITY_num>|半</MODIFIER>)(?:<ACTION_verb>半?要</ACTION_verb>)?<ACTION_verb>開會</ACTION_verb>": {
+            "id": "905adfb4-7428-408c-8c22-22efb0004808",
+            "utterance": "晚上十點開會"
+        },
+        "(?:(<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>[^<]+</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>){0,10}(?:<ENTITY_num>[^<]+</ENTITY_num><(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>.</(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>(?:<ENTITY_num>[^<]+</ENTITY_num>)?)?|<ENTITY_num>[^<]+</ENTITY_num><ENTITY_num>[^<]+</ENTITY_num>|半</MODIFIER>)(?:<ACTION_verb>半?要</ACTION_verb>)?<ACTION_verb>開</ACTION_verb><(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>[週周]會議?</(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>": {
+            "id": "8d7d2dbb-f459-4632-9bac-f8c5eae06663",
+            "utterance": "晚上十點開週會"
+        }
+    }
+}

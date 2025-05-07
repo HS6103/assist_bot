@@ -1,0 +1,52 @@
+{
+    "language": "zh-tw",
+    "type": "advance",
+    "version": {
+        "atk": "v276",
+        "intent": "1.0"
+    },
+    "user_defined": {
+        "as_dot": [
+            "."
+        ],
+        "as_meet": [
+            "周會",
+            "週會"
+        ]
+    },
+    "utterance": {
+        "每周五": {
+            "id": "549b03cc-e78f-419f-94cc-a597594f9416",
+            "pos": "<TIME_week>每周五</TIME_week>",
+            "lexy": [],
+            "pattern": "(?:<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>(每[^<]+)</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>){1,10}"
+        },
+        "每個禮拜": {
+            "id": "54cf20db-b4b9-48d5-baf3-f518b568e3cd",
+            "pos": "<QUANTIFIER>每</QUANTIFIER><TIME_week>個禮拜</TIME_week>",
+            "lexy": [],
+            "pattern": "<QUANTIFIER>每</QUANTIFIER><TIME_week>[^<]+</TIME_week>"
+        },
+        "每個月5號": {
+            "id": "182e53e7-d9ab-42c0-a3c9-b1ff37982022",
+            "pos": "<ENTITY_DetPhrase>每個</ENTITY_DetPhrase><ENTITY_nouny>月</ENTITY_nouny><TIME_day>5號</TIME_day>",
+            "lexy": [],
+            "pattern": "<ENTITY_DetPhrase>每個</ENTITY_DetPhrase><ENTITY_nouny>月</ENTITY_nouny>(?:<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>[^<]+</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>){1,10}"
+        },
+        "每個星期五": {
+            "id": "bd4a3dee-8f81-46b1-b866-c8ddee8341d1",
+            "pos": "<ENTITY_DetPhrase>每個</ENTITY_DetPhrase><TIME_week>星期五</TIME_week>",
+            "lexy": [],
+            "pattern": "<ENTITY_DetPhrase>每個</ENTITY_DetPhrase>(?:<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>[^<]+</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>){1,10}"
+        },
+        "每天早上十點": {
+            "id": "6785ede3-564d-4835-ac43-375e4cc8b326",
+            "pos": "<TIME_day>每天</TIME_day><TIME_day>早上</TIME_day><TIME_justtime>十點</TIME_justtime>",
+            "lexy": [],
+            "pattern": "(?:<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>(每[^<]+)</TIME_(?:holiday|justtime|day|week|month|season|year|decade)){1,10}?"
+        }
+    },
+    "alias": {},
+    "prompt": {},
+    "document": []
+}

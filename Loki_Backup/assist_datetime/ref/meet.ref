@@ -1,0 +1,159 @@
+{
+    "language": "zh-tw",
+    "type": "basic",
+    "version": {
+        "atk": "v276",
+        "intent": "1.0"
+    },
+    "user_defined": {
+        "as_dot": [
+            "."
+        ],
+        "as_meet": [
+            "周會",
+            "週會"
+        ]
+    },
+    "utterance": {
+        "開會": {
+            "id": "135c48f2-4327-4e0f-b00c-de0e0b65085a",
+            "argument": [
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "赴會",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會勘",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開議",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會面",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "研商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開庭",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "協商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召集",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開會",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        },
+        "開週會": {
+            "id": "097e031d-28b1-44dc-b7bb-72deaf4e6bd0",
+            "argument": [
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "有開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "發開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "正開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "站開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "原開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "到開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "集搬",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開過",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "改開",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ENTITY_nouny",
+                    "text": "週會",
+                    "checked": true,
+                    "checkbox": true
+                }
+            ]
+        }
+    },
+    "alias": {},
+    "prompt": {},
+    "document": []
+}

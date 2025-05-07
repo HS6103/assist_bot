@@ -1,0 +1,38 @@
+{
+    "language": "zh-tw",
+    "type": "advance",
+    "version": {
+        "atk": "v276",
+        "intent": "1.0"
+    },
+    "user_defined": {
+        "as_dot": [
+            "."
+        ],
+        "as_meet": [
+            "周會",
+            "週會"
+        ]
+    },
+    "utterance": {
+        "晚上十點開會": {
+            "id": "905adfb4-7428-408c-8c22-22efb0004808",
+            "pos": "<TIME_day>晚上</TIME_day><TIME_justtime>十點</TIME_justtime><ACTION_verb>開會</ACTION_verb>",
+            "lexy": [
+                "(?<!</FUNC_negation>)<(ACTION_verb|VerbP)>(開會|赴會|召開|會勘|開議|會面|會商|研商|召開了|開庭|協商)</(ACTION_verb|VerbP)>"
+            ],
+            "pattern": "(?:(<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>[^<]+</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>){0,10}(?:<ENTITY_num>[^<]+</ENTITY_num><(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>.</(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>(?:<ENTITY_num>[^<]+</ENTITY_num>)?)?|<ENTITY_num>[^<]+</ENTITY_num><ENTITY_num>[^<]+</ENTITY_num>|半</MODIFIER>)(?:<ACTION_verb>半?要</ACTION_verb>)?<ACTION_verb>開會</ACTION_verb>"
+        },
+        "晚上十點開週會": {
+            "id": "8d7d2dbb-f459-4632-9bac-f8c5eae06663",
+            "pos": "<TIME_day>晚上</TIME_day><TIME_justtime>十點</TIME_justtime><ACTION_verb>開</ACTION_verb><UserDefined>週會</UserDefined>",
+            "lexy": [
+                "(?<!</FUNC_negation>)<(ACTION_verb|VerbP)>(開|開了|有開|發開|正開|站開|原開|到開|集搬|開過|改開)</(ACTION_verb|VerbP)>"
+            ],
+            "pattern": "(?:(<TIME_(?:holiday|justtime|day|week|month|season|year|decade)>[^<]+</TIME_(?:holiday|justtime|day|week|month|season|year|decade)>){0,10}(?:<ENTITY_num>[^<]+</ENTITY_num><(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>.</(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>(?:<ENTITY_num>[^<]+</ENTITY_num>)?)?|<ENTITY_num>[^<]+</ENTITY_num><ENTITY_num>[^<]+</ENTITY_num>|半</MODIFIER>)(?:<ACTION_verb>半?要</ACTION_verb>)?<ACTION_verb>開</ACTION_verb><(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>[週周]會議?</(?:UserDefined|ENTITY_(?:nounHead|nouny?|oov))>"
+        }
+    },
+    "alias": {},
+    "prompt": {},
+    "document": []
+}

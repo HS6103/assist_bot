@@ -1,0 +1,160 @@
+{
+    "language": "zh-tw",
+    "type": "basic",
+    "pattern": {
+        "<TIME>[^<]+</TIME>": {
+            "id": "02490a00-27e1-4a32-bfe5-c6b42bd7cea4",
+            "noun": {
+                "count": 0
+            },
+            "verb": {
+                "lexy": false,
+                "text": [],
+                "count": 0
+            },
+            "argument": [
+                [
+                    "TIME",
+                    0
+                ]
+            ],
+            "utterance": "[十點]"
+        },
+        "<ENTITY_num>[^<]+</ENTITY_num><ENTITY_UserDefined>.</ENTITY_UserDefined>": {
+            "id": "d25926a3-87b9-4c4b-be02-fb676fa66c99",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [],
+                "count": 0
+            },
+            "argument": [
+                [
+                    "ENTITY_num",
+                    0
+                ]
+            ],
+            "utterance": "[10]."
+        },
+        "<TIME>[^<]+</TIME><ENTITY_num>[^<]+</ENTITY_num><ENTITY_num>[^<]+</ENTITY_num>": {
+            "id": "3b49662a-63b1-437b-9eda-531d452f9105",
+            "noun": {
+                "count": 0
+            },
+            "verb": {
+                "lexy": false,
+                "text": [],
+                "count": 0
+            },
+            "argument": [
+                [
+                    "TIME",
+                    0
+                ],
+                [
+                    "ENTITY_num",
+                    0
+                ],
+                [
+                    "ENTITY_num",
+                    1
+                ]
+            ],
+            "utterance": "[晚上][8]:[30]"
+        },
+        "<TIME>[^<]+</TIME><ENTITY_num>[^<]+</ENTITY_num><ENTITY_UserDefined>.</ENTITY_UserDefined>": {
+            "id": "426baac4-3d08-47bd-b157-da7099054c98",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [],
+                "count": 0
+            },
+            "argument": [
+                [
+                    "TIME",
+                    0
+                ],
+                [
+                    "ENTITY_num",
+                    0
+                ]
+            ],
+            "utterance": "[早上][10]."
+        },
+        "<ENTITY_num>[^<]+</ENTITY_num><ENTITY_UserDefined>.</ENTITY_UserDefined><ENTITY_num>[^<]+</ENTITY_num>": {
+            "id": "8e9ec051-e509-415b-a956-e608c5c4e57c",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [],
+                "count": 0
+            },
+            "argument": [
+                [
+                    "ENTITY_num",
+                    0
+                ],
+                [
+                    "ENTITY_num",
+                    1
+                ]
+            ],
+            "utterance": "[10].[40]"
+        },
+        "<ENTITY_num>[^<]+</ENTITY_num><ENTITY_UserDefined>.</ENTITY_UserDefined>(<MODIFIER_P>[^<]+</MODIFIER_P>)?": {
+            "id": "9606e501-6a5c-4a8d-974f-03d9a0a09f90",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [],
+                "count": 0
+            },
+            "argument": [
+                [
+                    "ENTITY_num",
+                    0
+                ],
+                [
+                    "MODIFIER_P",
+                    0
+                ]
+            ],
+            "utterance": "[10].[半]"
+        },
+        "<TIME>[^<]+</TIME><ENTITY_num>[^<]+</ENTITY_num><ENTITY_UserDefined>.</ENTITY_UserDefined>(<MODIFIER_P>[^<]+</MODIFIER_P>)?": {
+            "id": "2e094f30-f7a0-461d-ac59-fbb9e323ef8e",
+            "noun": {
+                "count": 1
+            },
+            "verb": {
+                "lexy": false,
+                "text": [],
+                "count": 0
+            },
+            "argument": [
+                [
+                    "TIME",
+                    0
+                ],
+                [
+                    "ENTITY_num",
+                    0
+                ],
+                [
+                    "MODIFIER_P",
+                    0
+                ]
+            ],
+            "utterance": "[晚上][10].[半]"
+        }
+    }
+}

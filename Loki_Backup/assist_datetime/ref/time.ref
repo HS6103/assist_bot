@@ -1,0 +1,177 @@
+{
+    "language": "zh-tw",
+    "type": "basic",
+    "version": {
+        "atk": "v276",
+        "intent": "1.0"
+    },
+    "user_defined": {
+        "as_dot": [
+            "."
+        ],
+        "as_meet": [
+            "周會",
+            "週會"
+        ]
+    },
+    "utterance": {
+        "10.": {
+            "id": "d25926a3-87b9-4c4b-be02-fb676fa66c99",
+            "argument": [
+                {
+                    "pos": "ENTITY_num",
+                    "text": "10",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "UserDefined",
+                    "text": ".",
+                    "checked": false,
+                    "checkbox": true
+                }
+            ]
+        },
+        "10.40": {
+            "id": "8e9ec051-e509-415b-a956-e608c5c4e57c",
+            "argument": [
+                {
+                    "pos": "ENTITY_num",
+                    "text": "10",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "UserDefined",
+                    "text": ".",
+                    "checked": false,
+                    "checkbox": true
+                },
+                {
+                    "pos": "ENTITY_num",
+                    "text": "40",
+                    "checked": true,
+                    "checkbox": true
+                }
+            ]
+        },
+        "10.半": {
+            "id": "9606e501-6a5c-4a8d-974f-03d9a0a09f90",
+            "argument": [
+                {
+                    "pos": "ENTITY_num",
+                    "text": "10",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "UserDefined",
+                    "text": ".",
+                    "checked": false,
+                    "checkbox": true
+                },
+                {
+                    "pos": "MODIFIER",
+                    "text": "半",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        },
+        "十點": {
+            "id": "02490a00-27e1-4a32-bfe5-c6b42bd7cea4",
+            "argument": [
+                {
+                    "pos": "TIME_justtime",
+                    "text": "十點",
+                    "checked": true,
+                    "checkbox": false
+                }
+            ]
+        },
+        "早上10.": {
+            "id": "426baac4-3d08-47bd-b157-da7099054c98",
+            "argument": [
+                {
+                    "pos": "TIME_day",
+                    "text": "早上",
+                    "checked": true,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ENTITY_num",
+                    "text": "10",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "UserDefined",
+                    "text": ".",
+                    "checked": false,
+                    "checkbox": true
+                }
+            ]
+        },
+        "晚上8:30": {
+            "id": "3b49662a-63b1-437b-9eda-531d452f9105",
+            "argument": [
+                {
+                    "pos": "TIME_day",
+                    "text": "晚上",
+                    "checked": true,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ENTITY_num",
+                    "text": "8",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "PUNCTUATION",
+                    "text": ":",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ENTITY_num",
+                    "text": "30",
+                    "checked": true,
+                    "checkbox": true
+                }
+            ]
+        },
+        "晚上10.半": {
+            "id": "2e094f30-f7a0-461d-ac59-fbb9e323ef8e",
+            "argument": [
+                {
+                    "pos": "TIME_day",
+                    "text": "晚上",
+                    "checked": true,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ENTITY_num",
+                    "text": "10",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "UserDefined",
+                    "text": ".",
+                    "checked": false,
+                    "checkbox": true
+                },
+                {
+                    "pos": "MODIFIER",
+                    "text": "半",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        }
+    },
+    "alias": {},
+    "prompt": {},
+    "document": []
+}

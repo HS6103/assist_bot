@@ -1,0 +1,313 @@
+{
+    "language": "zh-tw",
+    "type": "basic",
+    "version": {
+        "atk": "v276",
+        "intent": "1.0"
+    },
+    "user_defined": {
+        "as_dot": [
+            "."
+        ],
+        "as_meet": [
+            "周會",
+            "週會"
+        ]
+    },
+    "utterance": {
+        "取消": {
+            "id": "2b16174c-6847-44da-9b75-bad3f2687f3a",
+            "argument": [
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "抵消",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "中止",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "了斷",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "作廢",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "停辦",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "刪除",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "剷除",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "奪去",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "廢棄",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "廢止",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "廢除",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "排除",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "撤回",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "收回",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "減損",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "解約",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "解除",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "退訂",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "銷毀",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "除掉",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "革除",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "暫停",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "終止",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "撤銷",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "擱置",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "停止",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "取消了",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "取消",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        },
+        "不開會": {
+            "id": "528cacfc-7bd1-49d1-a8fa-07c9acefd96c",
+            "argument": [
+                {
+                    "pos": "FUNC_negation",
+                    "text": "不",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "赴會",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會勘",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開議",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會面",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "會商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "研商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開庭",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "協商",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "召集",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開會",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        },
+        "會議暫停": {
+            "id": "43f852c6-acb3-428d-bf6a-31e35b282539",
+            "argument": [
+                {
+                    "pos": "ENTITY_oov",
+                    "text": "會議",
+                    "checked": true,
+                    "checkbox": true
+                },
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "停止",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "中止",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "取消",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "終止",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "中斷",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "暫停了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "延期",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "停止了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "關閉",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "推遲",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "暫停",
+                    "checked": false,
+                    "checkbox": false
+                }
+            ]
+        }
+    },
+    "alias": {},
+    "prompt": {},
+    "document": []
+}

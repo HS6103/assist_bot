@@ -1,0 +1,729 @@
+{
+    "language": "zh-tw",
+    "type": "basic",
+    "version": {
+        "atk": "v276",
+        "intent": "1.0"
+    },
+    "user_defined": {
+        "as_noun": [
+            "會議紀錄"
+        ]
+    },
+    "utterance": {
+        "開會議紀錄": {
+            "id": "29ec8918-bf20-405b-919b-0932a017f216",
+            "argument": [
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "有開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "發開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "正開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "站開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "原開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "到開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "集搬",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開過",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "改開",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "UserDefined",
+                    "text": "會議紀錄",
+                    "checked": true,
+                    "checkbox": true
+                }
+            ]
+        },
+        "建立新的會議紀錄": {
+            "id": "9e6f5027-5c97-4bf0-b144-744e1a98a761",
+            "argument": [
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "修建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "創建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "創立",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "建政",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "建構",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "建造",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "成立",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "搭建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "構建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "樹立",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "組建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "興建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "設立",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "豎立",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "創製",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "創記錄",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "創設",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "創辦",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "創造",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "安排",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "安放",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "安設",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "搭蓋",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "擺放",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "擺設",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "籌辦",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "締造",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "編製",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "置放",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "興辦",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "設攤",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "開創",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "開站",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "開辦",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "開闢",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "設立了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "建立了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "創建了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "設立",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "創建",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "建立",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "MODIFIER",
+                    "text": "新",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "FUNC_inner",
+                    "text": "的",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "UserDefined",
+                    "text": "會議紀錄",
+                    "checked": true,
+                    "checkbox": true
+                }
+            ]
+        },
+        "開個新的會議紀錄": {
+            "id": "abcb6eb9-72a0-413d-9d8b-6e937955c16a",
+            "argument": [
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "有開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "發開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "正開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "站開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "原開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "到開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "集搬",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開過",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "改開",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ACTION_eventQuantifier",
+                    "text": "個",
+                    "checked": true,
+                    "checkbox": false
+                },
+                {
+                    "pos": "MODIFIER",
+                    "text": "新",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "FUNC_inner",
+                    "text": "的",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "UserDefined",
+                    "text": "會議紀錄",
+                    "checked": true,
+                    "checkbox": true
+                }
+            ]
+        },
+        "開一份新的會議紀錄": {
+            "id": "76d1f912-baf5-4e7c-9804-ed62ae8273dd",
+            "argument": [
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "開了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "有開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "發開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "正開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "站開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "原開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "到開",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "集搬",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "開過",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "改開",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "開",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ENTITY_classifier",
+                    "text": "一份",
+                    "checked": true,
+                    "checkbox": false
+                },
+                {
+                    "pos": "MODIFIER",
+                    "text": "新",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "FUNC_inner",
+                    "text": "的",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "UserDefined",
+                    "text": "會議紀錄",
+                    "checked": true,
+                    "checkbox": true
+                }
+            ]
+        },
+        "建立一份新的會議紀錄": {
+            "id": "7048bb3b-2dd2-4ed2-9ef4-1b80bec78902",
+            "argument": [
+                {
+                    "pos": "ACTION_verb",
+                    "lexy": [
+                        {
+                            "text": "修建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "創建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "創立",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "建政",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "建構",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "建造",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "成立",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "搭建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "構建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "樹立",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "組建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "興建",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "設立",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "豎立",
+                            "level": "tier_1",
+                            "checked": false
+                        },
+                        {
+                            "text": "創製",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "創記錄",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "創設",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "創辦",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "創造",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "安排",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "安放",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "安設",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "搭蓋",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "擺放",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "擺設",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "籌辦",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "締造",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "編製",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "置放",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "興辦",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "設攤",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "開創",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "開站",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "開辦",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "開闢",
+                            "level": "tier_2",
+                            "checked": false
+                        },
+                        {
+                            "text": "建立了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "設立了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "創建了",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "設立",
+                            "level": "word2vec",
+                            "checked": false
+                        },
+                        {
+                            "text": "創建",
+                            "level": "word2vec",
+                            "checked": false
+                        }
+                    ],
+                    "text": "建立",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "ENTITY_classifier",
+                    "text": "一份",
+                    "checked": true,
+                    "checkbox": false
+                },
+                {
+                    "pos": "MODIFIER",
+                    "text": "新",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "FUNC_inner",
+                    "text": "的",
+                    "checked": false,
+                    "checkbox": false
+                },
+                {
+                    "pos": "UserDefined",
+                    "text": "會議紀錄",
+                    "checked": true,
+                    "checkbox": true
+                }
+            ]
+        }
+    },
+    "alias": {},
+    "prompt": {},
+    "document": []
+}
