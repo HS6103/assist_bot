@@ -47,9 +47,9 @@ class notification():
         if self.task is None:
             self.task = asyncio.create_task(self.notify())
             if self.eventType == "meet":
-                meet_instances[str(self.datetime)] = self
+                meet_instances[self.datetime] = self
             else:
-                alarm_instances[str(self.datetime)] = self
+                alarm_instances[self.datetime] = self
 
     def cancel(self):
         self.task.cancel()
@@ -67,7 +67,7 @@ class notification():
     def to_dict(self):
         # Convert datetime to string for JSON serialization
         data = {
-            "datetime": str(self.datetime),
+            "datetime": self.datetime,
             "todoLIST": self.todoLIST,
             "content": self.content,
             "channelID": self.channelID,
@@ -86,12 +86,7 @@ class notification():
 
     async def notify(self):
         now = datetime.datetime.now()
-        if type(self.datetime) == str:
-            # If datetime is a string, convert it to a datetime object
-            target_time = datetime.datetime.strptime(self.datetime, "%Y-%m-%d %H:%M:%S")
-        else:
-            # If datetime is already a datetime object, use it directly
-            target_time = self.datetime
+        target_time = datetime.datetime.strptime(self.datetime, "%Y-%m-%d %H:%M:%S")
         await client.wait_until_ready()  # Ensure bot is logged in
         channel = client.get_channel(self.channelID)  # Get the target channel
         wait_time = (target_time - now).total_seconds()
@@ -128,8 +123,8 @@ class notification():
 def save_notifications():
     notifications_data = {}
     # Convert all Notification objects to dictionaries
-    meet_data = {str(key): value.to_dict() for key, value in meet_instances.items()}
-    alarm_data = {str(key): value.to_dict() for key, value in alarm_instances.items()}
+    meet_data = {key: value.to_dict() for key, value in meet_instances.items()}
+    alarm_data = {key: value.to_dict() for key, value in alarm_instances.items()}
 
     notifications_data.update(meet_data)  # Merge both dictionaries
     notifications_data.update(alarm_data)  # Merge both dictionaries
@@ -146,11 +141,12 @@ def load_notifications():
                     notification_tmp = json.load(json_file)
                     # Convert each dictionary back to a Notification or RepeatedNotification object
                     for key, value in notification_tmp.items():
+                        keyTimeSTR = value["datetime"]
                         newTime = None
-                        datetime_obj = datetime.datetime.strptime(value["datetime"], "%Y-%m-%d %H:%M:%S") # Convert string back to datetime
-                        if datetime_obj < datetime.datetime.now():
+                        keyTimeDATETIME = datetime.datetime.strptime(value["datetime"], "%Y-%m-%d %H:%M:%S") # Convert string back to datetime
+                        if keyTimeDATETIME < datetime.datetime.now():
                             if value["repeat"] == True:
-                                newTime = datetime_obj
+                                newTime = keyTimeDATETIME
                                 while datetime.datetime.now() > newTime: # If the datetime is in the past and repeat is True, set it until in the future
                                     newTime = newTime + datetime.timedelta(weeks=1)
                             else:
@@ -158,21 +154,23 @@ def load_notifications():
 
                         if value["eventType"] == "meet":
                             if newTime:
-                                if datetime.datetime.strftime(newTime, "%Y-%m-%d %H:%M:%S") not in notification_tmp.keys(): # If the datetime is not the same as the key, reset it
-                                    meet_instances[newTime] = notification.from_dict(value)
-                                    meet_instances[newTime].resetDatetime(newTime) # Reset the datetime to the loaded value
-                                    meet_instances[newTime].start() # Start the notification task
+                                newTimeSTR = datetime.datetime.strftime(newTime, "%Y-%m-%d %H:%M:%S") # Update the key to the new time
+                                if newTimeSTR not in notification_tmp.keys(): # If the datetime is not the same as the key, reset it
+                                    keyTimeSTR = newTimeSTR
+                                    meet_instances[keyTimeSTR] = notification.from_dict(value)
+                                    meet_instances[keyTimeSTR].resetDatetime(newTime) # Reset the datetime to the loaded value
+                                    meet_instances[keyTimeSTR].start() # Start the notification task
                                 else:
                                     continue # Skip if the datetime is in the past and repeat is False
                             else:
-                                meet_instances[str(datetime_obj)] = notification.from_dict(value)
-                                meet_instances[str(datetime_obj)].start() # Start the notification task
+                                meet_instances[keyTimeSTR] = notification.from_dict(value)
+                                meet_instances[keyTimeSTR].start() # Start the notification task
                             #print(meet_instances)
                         else:
-                            alarm_instances[str(datetime_obj)] = notification.from_dict(value)
-                            if datetime_obj != key: # If the datetime is not the same as the key, reset it
-                                alarm_instances[str(datetime_obj)].resetDatetime(datetime_obj)
-                            alarm_instances[str(datetime_obj)].start()
+                            alarm_instances[keyTimeSTR] = notification.from_dict(value)
+                            if keyTimeSTR != key: # If the datetime is not the same as the key, reset it
+                                alarm_instances[keyTimeSTR].resetDatetime(keyTimeDATETIME)
+                            alarm_instances[keyTimeSTR].start()
                             #print(alarm_instances)
 
                     print("Notifications loaded from backup.json")
