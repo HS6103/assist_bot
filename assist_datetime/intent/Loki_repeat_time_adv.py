@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-    Loki module for time
+    Loki module for repeat_time_adv
 
     Input:
         inputSTR      str,
@@ -16,14 +16,14 @@
         resultDICT    dict
 """
 
+from datetime import datetime
 from importlib.util import module_from_spec
 from importlib.util import spec_from_file_location
 from random import sample
-import datetime
 import json
 import os
 
-INTENT_NAME = "time"
+INTENT_NAME = "repeat_time_adv"
 CWD_PATH = os.path.dirname(os.path.abspath(__file__))
 
 def import_from_path(module_name, file_path):
@@ -33,7 +33,8 @@ def import_from_path(module_name, file_path):
     return module
 
 MODULE_DICT = {
-    "Account": import_from_path("assist_datetime_lib_Account", os.path.join(os.path.dirname(CWD_PATH), "lib/Account.py"))
+    "Account": import_from_path("assist_datetime_lib_Account", os.path.join(os.path.dirname(CWD_PATH), "lib/Account.py")),
+    "LLM": import_from_path("assist_datetime_lib_LLM", os.path.join(os.path.dirname(CWD_PATH), "lib/LLM.py"))
 }
 """
 Account 變數清單
@@ -49,7 +50,7 @@ Account 變數清單
 REPLY_PATH = MODULE_DICT["Account"].REPLY_PATH
 ACCOUNT_DICT = MODULE_DICT["Account"].ACCOUNT_DICT
 USER_DEFINED_DICT = MODULE_DICT["Account"].USER_DEFINED_DICT
-ARTICUT = MODULE_DICT["Account"].ARTICUT
+getLLM = MODULE_DICT["LLM"].getLLM
 
 # userDefinedDICT (Deprecated)
 # 請使用 Account 變數 USER_DEFINED_DICT 代替
@@ -67,20 +68,6 @@ if os.path.exists(replyPathSTR):
     except Exception as e:
         print("[ERROR] reply_{}.json => {}".format(INTENT_NAME, str(e)))
 CHATBOT = True if replyDICT else False
-
-# 將時間詞轉為 datetime 格式
-def arg2Time(argSTR):
-    keywords = ["晚", "凌晨"]
-    articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
-    if articutResultDICT["time"] != [[]]:
-        datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
-        datetimeOBJ = datetime.datetime.strptime(datetimeSTR, "%Y-%m-%d %H:%M:%S")
-        if any(word in argSTR for word in keywords) and 0 < datetimeOBJ.hour < 13:
-            datetimeOBJ += datetime.timedelta(hours=12)
-    else:
-        datetimeOBJ = None
-
-    return datetimeOBJ
 
 # 將符合句型的參數列表印出。這是 debug 或是開發用的。
 def debugInfo(inputSTR, utterance):
@@ -100,69 +87,69 @@ def getReply(utterance, args):
 
 def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolkitDICT={}):
     debugInfo(inputSTR, utterance)
-        
-    if utterance == "[10].":
+    if utterance == "每個星期五":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            inputSTR = f"{args[0]}點"
-            resultDICT["time"].append(arg2Time(inputSTR),inputSTR)
-            resultDICT["intent"].append(INTENT_NAME)
-
-    if utterance == "[10].[40]":
-        if CHATBOT:
-            replySTR = getReply(utterance, args)
-            if replySTR:
-                resultDICT["response"] = replySTR
-                resultDICT["source"] = "reply"
-        else: 
-            inputSTR = f"{args[0]}點{args[1]}分"
-            resultDICT["time"].append(arg2Time(inputSTR),inputSTR)
-            resultDICT["intent"].append(INTENT_NAME)
+            resultDICT['repeat'] = True
+            if args[0] in ["month", "week", "day"]:
+                resultDICT['repeat_delta'] = args[0]
 
 
-    if utterance == "[10].[半]":
+    if utterance == "每個月5號":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            if args[1] == '半':
-                inputSTR = f"{args[0]}點半"
-            else:
-                inputSTR = f"{args[0]}點"
-            resultDICT["time"].append(arg2Time(inputSTR),inputSTR)
-            resultDICT["intent"].append(INTENT_NAME)
+            resultDICT['repeat'] = True
+            resultDICT['repeat_delta'] = "months=1"
 
-    if utterance == "[十點]":
+
+    if utterance == "每個禮拜":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            if args[0].startswith('每'):
-                resultDICT["repeat"] = True
-                resultDICT["time"] = [arg2Time(args[0][1:]),args[0]]
-            else:
-                resultDICT["time"].append([arg2Time(args[0]),args[0]])
-            resultDICT["intent"].append(INTENT_NAME)
+            resultDICT['repeat'] = True
+            resultDICT['repeat_delta'] = "weeks=1"
 
 
-    if utterance == "[早上][10].":
+    if utterance == "每周五":
         if CHATBOT:
             replySTR = getReply(utterance, args)
             if replySTR:
                 resultDICT["response"] = replySTR
                 resultDICT["source"] = "reply"
         else:
-            inputSTR = f"{args[0]}{args[1]}點"
-            resultDICT["time"].append(arg2Time(inputSTR),inputSTR)
-            resultDICT["intent"].append(INTENT_NAME)
+            resultDICT['repeat'] = True
+            if args[0] == "month":
+                resultDICT['repeat_delta'] = datetime.timedelta(months=1)
+            elif args[0] == "week":
+                resultDICT['repeat_delta'] = datetime.timedelta(weeks=1)
+            elif args[0] == "day":
+                resultDICT['repeat_delta'] = datetime.timedelta(days=1)
+
+    if utterance == "每天早上十點":
+        if CHATBOT:
+            replySTR = getReply(utterance, args)
+            if replySTR:
+                resultDICT["response"] = replySTR
+                resultDICT["source"] = "reply"
+        else:
+            resultDICT['repeat'] = True
+            if args[0] == "month":
+                resultDICT['repeat_delta'] = datetime.timedelta(months=1)
+            elif args[0] == "week":
+                resultDICT['repeat_delta'] = datetime.timedelta(weeks=1)
+            elif args[0] == "day":
+                resultDICT['repeat_delta'] = datetime.timedelta(days=1)
 
 
     return resultDICT
@@ -171,5 +158,5 @@ def getResult(inputSTR, utterance, args, resultDICT, refDICT, pattern="", toolki
 if __name__ == "__main__":
     from pprint import pprint
 
-    resultDICT = getResult("10.", "[10].", [], {}, {})
+    resultDICT = getResult("每周五", "每周五", [], {}, {})
     pprint(resultDICT)

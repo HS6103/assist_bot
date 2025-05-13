@@ -12,6 +12,7 @@ import asyncio
 from pprint import pprint
 import os
 from dotenv import load_dotenv
+from dateutil.relativedelta import relativedelta
 load_dotenv()
 
 from assist_datetime.main import askLoki as askLoki_datetime
@@ -24,13 +25,31 @@ alarm_instances = {} # Store alarm instances
 
 #class notificationHandler():
 
+def repeatStr2delta(repeatDeltaSTR):
+    """
+    Convert a repeat string to a timedelta object.
+    """
+    repeatDeltaINT = int(repeatDeltaSTR.split("=")[1]) # Extract the repeat delta value
+    if repeatDeltaSTR.startswith("months"):
+        return relativedelta(months=repeatDeltaINT)
+    elif repeatDeltaSTR.startswith("weeks"):
+        return datetime.timedelta(weeks=repeatDeltaINT)
+    elif repeatDeltaSTR.startswith("days"):
+        return datetime.timedelta(days=repeatDeltaINT)
+    else:
+        raise ValueError("Invalid repeat delta string format.")
+
 class notification():
-    def __init__(self,timeSTR,repeat=False,participant="@everyone",eventTypeSTR="alarm",contentSTR=""):
+    def __init__(self,timeSTR,repeat=False,participant="@everyone",eventTypeSTR="alarm",contentSTR="",repeatDelta=None):
+        """
+        Initialize the notification object with the given parameters.
+        """
         self.datetime =  timeSTR
         self.todoLIST = []
         self.channelID = int(os.getenv("channel_id"))
         self.task = None
         self.repeat = repeat
+        self.repeatDelta = repeatDelta
         self.participant = participant
         self.eventType = eventTypeSTR
         self.content = contentSTR
@@ -56,8 +75,11 @@ class notification():
         self.task = None
 
     def setRepeat(self):
-        newTime = datetime.datetime.strptime(self.datetime, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(weeks=1)  # 預設是週會，一週重複一次
-        newmeet = notification(str(newTime), repeat=True, participant=self.participant, eventTypeSTR=self.eventType, contentSTR=self.content)
+        newTime = datetime.datetime.strptime(self.datetime, "%Y-%m-%d %H:%M:%S") # Convert string back to datetime
+        repeatDeltaSTR = self.repeatDelta.split("=")[0]
+        repeatDeltaINT = int(self.repeatDelta.split("=")[1]) # Extract the repeat delta value
+        newTime += repeatStr2delta(self.repeatDelta)
+        newmeet = notification(str(newTime), repeat=True, participant=self.participant, eventTypeSTR=self.eventType, contentSTR=self.content, repeatDelta=self.repeatDelta)
         newmeet.start()
     
     def resetDatetime(self,newTime):
@@ -74,7 +96,8 @@ class notification():
             "task": None,
             "repeat": self.repeat,
             "participant": self.participant,
-            "eventType": self.eventType
+            "eventType": self.eventType,
+            "repeatDelta": str(self.repeatDelta)
         }
          
         return data
@@ -82,7 +105,7 @@ class notification():
     @classmethod
     def from_dict(cls, data):
         # Create a new instance of Notification using the dictionary data
-        return cls(timeSTR=data["datetime"], repeat=data["repeat"], participant=data["participant"],eventTypeSTR=data["eventType"], contentSTR=data["content"])
+        return cls(timeSTR=data["datetime"], repeat=data["repeat"], participant=data["participant"],eventTypeSTR=data["eventType"], contentSTR=data["content"], repeatDelta=data["repeatDelta"])
 
     async def notify(self):
         now = datetime.datetime.now()
@@ -90,10 +113,10 @@ class notification():
         await client.wait_until_ready()  # Ensure bot is logged in
         channel = client.get_channel(self.channelID)  # Get the target channel
         wait_time = (target_time - now).total_seconds()
-        if wait_time < 0:
-            self.resetDatetime(target_time + datetime.timedelta(weeks=1))
-            print(self.getDatetime())
-            wait_time = (target_time - now).total_seconds()
+        # if wait_time < 0: # to be removed
+        #     self.resetDatetime(target_time + datetime.timedelta(weeks=1))  
+        #     print(self.getDatetime())
+        #     wait_time = (target_time - now).total_seconds()
 
         while not client.is_closed():
             if self.datetime:
@@ -102,17 +125,19 @@ class notification():
                     await asyncio.sleep(wait_time)  # Wait until the scheduled time
                     if self.eventType == "meet":
                         await channel.send(f"哈囉！我來提醒 {self.participant} 要開會囉")  # Send the message
-                    elif self.eventType == "alarm":
+                    else:
                         await channel.send(f"哈囉！我來提醒 {self.participant} 「{self.content}」囉！")
+
+                    if self.repeat == True:
+                        self.setRepeat()
+                    self.cancel()
+
                     if self in meet_instances.values():
                         # Remove the instance from meet_instances after sending the notification
                         del meet_instances[str(self.datetime)]
                     else:
                         # Remove the instance from alarm_instances after sending the notification
                         del alarm_instances[str(self.datetime)]
-                    if self.repeat == True:
-                        self.setRepeat()
-                    self.cancel()
                     print(f'Notification for {str(self.datetime)} sent')
                     
                 except asyncio.CancelledError:
@@ -147,8 +172,9 @@ def load_notifications():
                         if keyTimeDATETIME < datetime.datetime.now():
                             if value["repeat"] == True:
                                 newTime = keyTimeDATETIME
+
                                 while datetime.datetime.now() > newTime: # If the datetime is in the past and repeat is True, set it until in the future
-                                    newTime = newTime + datetime.timedelta(weeks=1)
+                                    newTime += repeatStr2delta(value["repeatDelta"])
                             else:
                                 continue # Skip if the datetime is in the past and repeat is False
 
@@ -213,6 +239,7 @@ def getLokiResult(inputSTR, projSTR, filterLIST=[]):
         "time":[],
         "intent":[],
         "repeat":[],
+        "repeat_delta":[],
         "participant":[],
         "content":[]
     }
@@ -315,20 +342,24 @@ class BotClient(discord.Client):
                             self.mscDICT[message.author.id]["false_count"] = 0
                             # 會議預約 + 一般提醒
                             if "notification_adv" in resultDICT["intent"] and "meet_adv" in resultDICT["intent"]:
+                                if resultDICT["repeat"] == []:
+                                    resultDICT["repeat"].append(False)
                                 repeatBOOL = resultDICT["repeat"][0]
                                 if "time" in resultDICT["intent"]:
-                                    alarmDATETIME = datetime.datetime.strftime(resultDICT["time"][0][0], "%Y-%m-%d %H:%M:%S")
+                                    alarmDATETIME = resultDICT["time"][0][0]
                                     if alarmDATETIME < datetime.datetime.now():
                                         if repeatBOOL == False:
                                             replySTR = "你預約的時間已經過了喔！"
                                         else:
-                                            alarmDATETIME += datetime.timedelta(weeks=1)
-                                            newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet")
+                                            while datetime.datetime.now() > alarmDATETIME: # If the datetime is in the past and repeat is True, set it until in the future
+                                                alarmDATETIME += repeatStr2delta(resultDICT["repeat_delta"][0])
+                                            alarmDATETIME = datetime.datetime.strftime(alarmDATETIME, "%Y-%m-%d %H:%M:%S")
+                                            newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet",repeatDelta=resultDICT["repeat_delta"][0])
                                             newMeet.start()
                                             print(meet_instances)
                                             replySTR = replySTR.format(resultDICT["time"][0][1])
                                     else:
-                                        newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet")
+                                        newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet",repeatDelta=resultDICT["repeat_delta"][0])
                                         newMeet.start()
                                         print(meet_instances)
                                         replySTR = replySTR.format(resultDICT["time"][0][1])
@@ -337,23 +368,27 @@ class BotClient(discord.Client):
 
                             # 純會議提醒
                             elif "meet_adv" in resultDICT["intent"]:
+                                if resultDICT["repeat"] == []:
+                                    resultDICT["repeat"].append(False)
                                 repeatBOOL = resultDICT["repeat"][0]
                                 if "time" in resultDICT["intent"]:
-                                    alarmDATETIME = datetime.datetime.strftime(resultDICT["time"][0][0], "%Y-%m-%d %H:%M:%S")
+                                    alarmDATETIME = resultDICT["time"][0][0]
                                     if checkDuplicateMeet(str(alarmDATETIME)):
                                         replySTR = "該時段已經有預約會議提醒了喔！"
                                     elif alarmDATETIME < datetime.datetime.now():
                                         if repeatBOOL == False:
                                             replySTR = "你預約的時間已經過了喔！"
                                         else:
-                                            alarmDATETIME += datetime.timedelta(weeks=1)
-                                            newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet")
+                                            while datetime.datetime.now() > alarmDATETIME: # If the datetime is in the past and repeat is True, set it until in the future
+                                                alarmDATETIME += repeatStr2delta(resultDICT["repeat_delta"][0])
+                                            alarmDATETIME = datetime.datetime.strftime(alarmDATETIME, "%Y-%m-%d %H:%M:%S")
+                                            newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet",repeatDelta=resultDICT["repeat_delta"][0])
                                             newMeet.start()
                                             print(meet_instances)
                                             self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                             replySTR = replySTR.format(resultDICT["time"][0][1])
                                     else:
-                                        newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet")
+                                        newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet",repeatDelta=resultDICT["repeat_delta"][0])
                                         newMeet.start()
                                         print(meet_instances)
                                         self.mscDICT[message.author.id]["latestIntent"] = intentSTR
@@ -364,23 +399,41 @@ class BotClient(discord.Client):
                             
                             # 純一般提醒
                             elif "notification_adv" in resultDICT["intent"]:
-                                if "time" in resultDICT["intent"] and resultDICT["time"][0][0] != []:
-                                    alarmDATETIME = datetime.datetime.strftime(resultDICT["time"][0][0], "%Y-%m-%d %H:%M:%S")
+                                if resultDICT["repeat"] == []:
+                                    resultDICT["repeat"].append(False)
+                                repeatBOOL = resultDICT["repeat"][0]
+                                if "time" in resultDICT["intent"] and resultDICT["time"][0] != []:
+                                    alarmDATETIME = resultDICT["time"][0][0]
                                     participantSTR = resultDICT['participant'][0]
                                     contentSTR = resultDICT["content"][0]
-                                    replySTR = replySTR.format(resultDICT["time"][0][1])
-                                    newAlarm = notification(alarmDATETIME,participant=participantSTR,contentSTR=contentSTR)
-                                    newAlarm.start()
-                                    print(alarm_instances)
-                                    replySTR = f"好的，我會在{alarmDATETIME}提醒 {participantSTR}「{contentSTR}」！"
-                                    self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+                                    if resultDICT["time"][0][0] < datetime.datetime.now():
+                                        if repeatBOOL == False:
+                                            replySTR = "你預約的時間已經過了喔！"
+                                        else:
+                                            while datetime.datetime.now() > alarmDATETIME: # If the datetime is in the past and repeat is True, set it until in the future
+                                                alarmDATETIME += repeatStr2delta(resultDICT["repeat_delta"][0])
+                                            alarmDATETIME = datetime.datetime.strftime(alarmDATETIME, "%Y-%m-%d %H:%M:%S")
+                                            newAlarm = notification(alarmDATETIME,repeat=repeatBOOL,participant=participantSTR,contentSTR=contentSTR,repeatDelta=resultDICT["repeat_delta"][0])
+                                            newAlarm.start()
+                                            print(alarm_instances)
+                                            replySTR = f"好的，我會在 {alarmDATETIME} 提醒 {participantSTR}「{contentSTR}」！"
+                                            self.mscDICT[message.author.id]["latestIntent"] = intentSTR
+                                    else:
+                                        if resultDICT["repeat_delta"] != []:
+                                            newAlarm = notification(alarmDATETIME,repeat=repeatBOOL,participant=participantSTR,contentSTR=contentSTR,repeatDelta=resultDICT["repeat_delta"][0])
+                                        else:
+                                            newAlarm = notification(alarmDATETIME,repeat=repeatBOOL,participant=participantSTR,contentSTR=contentSTR)
+                                        newAlarm.start()
+                                        print(alarm_instances)
+                                        replySTR = f"好的，我會在 {alarmDATETIME} 提醒 {participantSTR}「{contentSTR}」！"
+                                        self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                 else:
                                     self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                     pass  # 'response': ['請問什麼時候要提醒您呢？']
                             
                             
                             elif intentSTR == "time":
-                                alarmDATETIME = datetime.datetime.strftime(resultDICT["time"][0][0], "%Y-%m-%d %H:%M:%S")
+                                alarmDATETIME = resultDICT["time"][0][0]
                                 latestIntent = self.mscDICT[message.author.id]["latestIntent"]
                                 if latestIntent == "meet_adv":
                                     if checkDuplicateMeet(str(alarmDATETIME)):
@@ -388,6 +441,7 @@ class BotClient(discord.Client):
                                     elif alarmDATETIME < datetime.datetime.now():
                                         replySTR = "你預約的時間已經過了喔！"
                                     else:
+                                        alarmDATETIME = datetime.datetime.strftime(alarmDATETIME, "%Y-%m-%d %H:%M:%S")
                                         newMeet = notification(alarmDATETIME,eventTypeSTR="meet")
                                         newMeet.start()
                                         print(meet_instances)
@@ -403,7 +457,7 @@ class BotClient(discord.Client):
                                         self.mscDICT[message.author.id]["latestIntent"] = intentSTR
 
                                 
-                                elif latestIntent == "set_adv":
+                                elif latestIntent == "notification_adv":
                                     if alarmDATETIME < datetime.datetime.now():
                                         replySTR = "你預約的時間已經過了喔！"
                                     else:
