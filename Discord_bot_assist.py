@@ -126,7 +126,7 @@ class notification():
                     if self.eventType == "meet":
                         await channel.send(f"哈囉！我來提醒 {self.participant} 要開會囉")  # Send the message
                     else:
-                        await channel.send(f"哈囉！我來提醒 {self.participant} 「{self.content}」囉！")
+                        await channel.send(f"哈囉！我來提醒 {self.participant} 「{self.content}」！")
 
                     if self.repeat == True:
                         self.setRepeat()
