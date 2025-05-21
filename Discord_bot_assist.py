@@ -66,9 +66,9 @@ class notification():
         if self.task is None:
             self.task = asyncio.create_task(self.notify())
             if self.eventType == "meet":
-                meet_instances[self.datetime] = self
+                meet_instances[str(self.datetime)] = self
             else:
-                alarm_instances[self.datetime] = self
+                alarm_instances[str(self.datetime)] = self
 
     def cancel(self):
         self.task.cancel()
@@ -136,7 +136,7 @@ class notification():
                     if self in meet_instances.values():
                         # Remove the instance from meet_instances after sending the notification
                         del meet_instances[str(self.datetime)]
-                    else:
+                    elif self in alarm_instances.values():
                         # Remove the instance from alarm_instances after sending the notification
                         del alarm_instances[str(self.datetime)]
                     print(f'Notification for {str(self.datetime)} sent')
