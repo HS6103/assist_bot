@@ -89,7 +89,7 @@ class notification():
     def to_dict(self):
         # Convert datetime to string for JSON serialization
         data = {
-            "datetime": self.datetime,
+            "datetime": str(self.datetime),
             "todoLIST": self.todoLIST,
             "content": self.content,
             "channelID": self.channelID,
@@ -109,6 +109,7 @@ class notification():
 
     async def notify(self):
         now = datetime.datetime.now()
+        self.datetime = str(self.datetime)
         target_time = datetime.datetime.strptime(self.datetime, "%Y-%m-%d %H:%M:%S")
         await client.wait_until_ready()  # Ensure bot is logged in
         channel = client.get_channel(self.channelID)  # Get the target channel
@@ -148,8 +149,8 @@ class notification():
 def save_notifications():
     notifications_data = {}
     # Convert all Notification objects to dictionaries
-    meet_data = {key: value.to_dict() for key, value in meet_instances.items()}
-    alarm_data = {key: value.to_dict() for key, value in alarm_instances.items()}
+    meet_data = {str(key): value.to_dict() for key, value in meet_instances.items()}
+    alarm_data = {str(key): value.to_dict() for key, value in alarm_instances.items()}
 
     notifications_data.update(meet_data)  # Merge both dictionaries
     notifications_data.update(alarm_data)  # Merge both dictionaries
@@ -193,10 +194,18 @@ def load_notifications():
                                 meet_instances[keyTimeSTR].start() # Start the notification task
                             #print(meet_instances)
                         else:
-                            alarm_instances[keyTimeSTR] = notification.from_dict(value)
-                            if keyTimeSTR != key: # If the datetime is not the same as the key, reset it
-                                alarm_instances[keyTimeSTR].resetDatetime(keyTimeDATETIME)
-                            alarm_instances[keyTimeSTR].start()
+                            if newTime:
+                                newTimeSTR = datetime.datetime.strftime(newTime, "%Y-%m-%d %H:%M:%S") # Update the key to the new time
+                                if newTimeSTR not in notification_tmp.keys(): # If the datetime is not the same as the key, reset it
+                                    keyTimeSTR = newTimeSTR
+                                    alarm_instances[keyTimeSTR] = notification.from_dict(value)
+                                    alarm_instances[keyTimeSTR].resetDatetime(newTime) # Reset the datetime to the loaded value
+                                    alarm_instances[keyTimeSTR].start() # Start the notification task
+                                else:
+                                    continue # Skip if the datetime is in the past and repeat is False
+                            else:
+                                alarm_instances[keyTimeSTR] = notification.from_dict(value)
+                                alarm_instances[keyTimeSTR].start() # Start the notification task
                             #print(alarm_instances)
 
                     print("Notifications loaded from backup.json")
@@ -388,7 +397,10 @@ class BotClient(discord.Client):
                                             self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                             replySTR = replySTR.format(resultDICT["time"][0][1])
                                     else:
-                                        newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet",repeatDelta=resultDICT["repeat_delta"][0])
+                                        if resultDICT["repeat_delta"] != []:
+                                            newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet",repeatDelta=resultDICT["repeat_delta"][0])
+                                        else:
+                                            newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet")
                                         newMeet.start()
                                         print(meet_instances)
                                         self.mscDICT[message.author.id]["latestIntent"] = intentSTR
