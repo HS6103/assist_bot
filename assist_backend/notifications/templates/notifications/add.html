@@ -1,0 +1,17 @@
+<!-- notifications/templates/notifications/add.html -->
+<!DOCTYPE html>
+<h2>Add Notification</h2>
+<form method="post">
+    {% csrf_token %}
+    Datetime: <input type="text" name="datetime" required><br>
+    Content: <input type="text" name="content"><br>
+    Participant: <input type="text" name="participant" value="@everyone"><br>
+    Event Type:
+    <select name="eventType" id="dropdown">
+        <option value="alarm">alarm</option>
+        <option value="meet">meet</option>
+    </select><br>
+    Repeat: <input type="checkbox" name="repeat"><br>
+    Repeat Delta: <input type="text" name="repeatDelta" value="months=1"><br>
+    <input type="submit" value="Add">
+</form>

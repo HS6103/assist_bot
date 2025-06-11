@@ -1,0 +1,25 @@
+<!-- notifications/templates/notifications/index.html -->
+<!DOCTYPE html>
+<h1>Notifications</h1>
+<table>
+    <tr>
+        <th>DateTime</th>
+        <th>Content</th>
+        <th>Repeat</th>
+        <th>Participant</th>
+        <th>Actions</th>
+    </tr>
+    {% for key, n in notifications.items %}
+    <tr>
+        <td>{{ key }}</td>
+        <td>{{ n.content }}</td>
+        <td>{{ n.repeat }}</td>
+        <td>{{ n.participant }}</td>
+        <td>
+            <a href="{% url 'edit_notification' key=key %}">Edit</a> |
+            <a href="{% url 'delete_notification' key=key %}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'add_notification' %}">Add Notification</a>

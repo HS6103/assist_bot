@@ -1,0 +1,16 @@
+<!-- notifications/templates/notifications/edit.html -->
+<!DOCTYPE html>
+<h2>Edit Notification</h2>
+<form method="post">
+    {% csrf_token %}
+    Content: <input type="text" name="content" value="{{ notification.content }}"><br>
+    Participant: <input type="text" name="participant" value="{{ notification.participant }}"><br>
+    Event Type:
+    <select name="eventType" id="dropdown">
+        <option value="alarm">alarm</option>
+        <option value="meet">meet</option>
+    </select><br>
+    Repeat: <input type="checkbox" name="repeat" {% if notification.repeat %}checked{% endif %}><br>
+    Repeat Delta: <input type="text" name="repeatDelta" value="{{ notification.repeatDelta }}"><br>
+    <input type="submit" value="Update">
+</form>
