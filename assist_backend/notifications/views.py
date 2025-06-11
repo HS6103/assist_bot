@@ -6,7 +6,7 @@ import os
 from django.shortcuts import render, redirect
 from django.http import HttpResponseBadRequest
 
-JSON_FILE_PATH = 'C:/Users/user/Desktop/Python/assist_bot/backup.json'
+JSON_FILE_PATH = '../backup.json'
 
 def load_notifications():
     if os.path.exists(JSON_FILE_PATH):
