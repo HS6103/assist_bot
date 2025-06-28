@@ -114,10 +114,6 @@ class notification():
         await client.wait_until_ready()  # Ensure bot is logged in
         channel = client.get_channel(self.channelID)  # Get the target channel
         wait_time = (target_time - now).total_seconds()
-        # if wait_time < 0: # to be removed
-        #     self.resetDatetime(target_time + datetime.timedelta(weeks=1))  
-        #     print(self.getDatetime())
-        #     wait_time = (target_time - now).total_seconds()
 
         while not client.is_closed():
             if self.datetime:
@@ -402,7 +398,7 @@ class BotClient(discord.Client):
                                         else:
                                             newMeet = notification(alarmDATETIME,repeatBOOL,eventTypeSTR="meet")
                                         newMeet.start()
-                                        print(meet_instances)
+                                        print(f"meet instances: {meet_instances}")
                                         self.mscDICT[message.author.id]["latestIntent"] = intentSTR
                                         replySTR = replySTR.format(resultDICT["time"][0][1])
                                 else:

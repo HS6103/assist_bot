@@ -22,6 +22,7 @@ from random import sample
 import datetime
 import json
 import os
+import re
 
 INTENT_NAME = "time"
 CWD_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -49,7 +50,9 @@ Account 變數清單
 REPLY_PATH = MODULE_DICT["Account"].REPLY_PATH
 ACCOUNT_DICT = MODULE_DICT["Account"].ACCOUNT_DICT
 USER_DEFINED_DICT = MODULE_DICT["Account"].USER_DEFINED_DICT
-ARTICUT = MODULE_DICT["Account"].ARTICUT
+# ARTICUT = MODULE_DICT["Account"].ARTICUT
+from ArticutAPI import Articut
+ARTICUT = Articut(ACCOUNT_DICT["username"], ACCOUNT_DICT["api_key"])
 
 # userDefinedDICT (Deprecated)
 # 請使用 Account 變數 USER_DEFINED_DICT 代替
@@ -68,10 +71,15 @@ if os.path.exists(replyPathSTR):
         print("[ERROR] reply_{}.json => {}".format(INTENT_NAME, str(e)))
 CHATBOT = True if replyDICT else False
 
+time_nowSTR = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=8))).strftime("%Y-%m-%d %H:%M:%S")
+
 # 將時間詞轉為 datetime 格式
 def arg2Time(argSTR):
+    argSTR = re.sub(r"<[^<]+>","", argSTR)  # 移除標籤
+    print("[DEBUG] arg2Time: {}".format(argSTR))  # Debugging line
     keywords = ["晚", "凌晨"]
-    articutResultDICT = ARTICUT.parse(argSTR, level= 'lv3')
+    articutResultDICT = ARTICUT.parse(argSTR, timeRef=time_nowSTR, level='lv3')
+    print("[DEBUG] articutResultDICT: {}".format(articutResultDICT))  # Debugging line
     if articutResultDICT["time"] != [[]]:
         datetimeSTR = articutResultDICT["time"][0][0]["datetime"]
         datetimeOBJ = datetime.datetime.strptime(datetimeSTR, "%Y-%m-%d %H:%M:%S")
