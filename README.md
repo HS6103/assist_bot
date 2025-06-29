@@ -1,4 +1,4 @@
-# assist_bot
+# Assist Bot 智能通知助理
 
 Assist Bot is a modular chatbot and meeting assistant platform built with Python. It supports intent recognition, meeting record management, and integration with external APIs such as Articut and Loki for natural language processing.
 
