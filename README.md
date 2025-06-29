@@ -4,11 +4,9 @@ Assist Bot is a modular chatbot and meeting assistant platform built with Python
 
 ## Features
 
-- **Chatbot Mode**: Flexible chatbot with customizable prompts and responses.
 - **Meeting Record Management**: Create, manage, and backup meeting records.
 - **Intent Recognition**: Uses Loki API for intent detection and argument extraction.
 - **Extensible Architecture**: Modular design for easy extension and maintenance.
-- **User Dictionary Support**: Integrate custom user-defined dictionaries for NLP tasks.
 - **Backup Utilities**: Automated backup for intents and meeting records.
 
 ## Project Structure
@@ -46,12 +44,12 @@ assist_bot/
 
 ## Usage
 
-### Chatbot UI
+### Discord Bot
 
-Each module (e.g., `assist_datetime`, `assist_record`) provides a `ChatbotMakerUI.py` for interactive use:
+To start the Discord bot:
 
 ```sh
-python assist_record/ChatbotMakerUI.py
+python Discord_bot_assist.py
 ```
 
 ### Backend
@@ -61,14 +59,6 @@ To run the Django backend:
 ```sh
 cd assist_backend
 python manage.py runserver
-```
-
-### Discord Bot
-
-To start the Discord bot:
-
-```sh
-python Discord_bot_assist.py
 ```
 
 ## Customization
