@@ -337,9 +337,9 @@ class BotClient(discord.Client):
                 logging.debug(resultDICT)
                 try:
                     if resultDICT:
+                        replySTR = "抱歉，這好像不是我的工作內容，但我可以幫你設定提醒或預約會議喔！" # 預設回應
                         # 不符合任何意圖
                         if resultDICT["intent"] == []: 
-                            replySTR = "抱歉，我看不太懂你要我做什麼，要閒聊請去找真人喔 <3"
                             self.mscDICT[message.author.id]["false_count"] += 1
                         else:
                             replySTR = resultDICT["response"][0]
@@ -510,7 +510,6 @@ class BotClient(discord.Client):
                             return None
 
                     else:
-                        replySTR = "抱歉，這好像跟我的工作無關，要閒聊請去找真人喔 <3"
                         self.mscDICT[message.author.id]["false_count"] += 1
 
                 except Exception as e:
